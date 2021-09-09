@@ -33,7 +33,6 @@ plt.title("Competetive Comparision")
 plt.legend()
 plt.show()'''
 
-#insta.login('watchnext.se', 'Blackslave00')
 
 #x=user.get_followers()
 
