@@ -9,6 +9,9 @@ insta= instaloader.Instaloader()
 username= 'sendmomo'
 
 def get_profileObject(username):
+    '''
+    Retrieve a profile object for a given username
+    '''
     profile = instaloader.Profile.from_username(insta.context, username)
     return profile
 
@@ -17,7 +20,11 @@ def get_profileDetails(profile):
     media_count = profile.mediacount
     
 def get_postDetails(profile):
-    post_id, likes, comments, is_video, video_view_count, date = ([] for i in range(6))
+    '''
+    Retrieve attributes for all posts of a user
+    profile - profile object for a particular user
+    '''
+    post_id, likes, comments, is_video, video_view_count, date = ([] for i in range(6)) # post_id - post shortcode
     for i in profile.get_posts():
         post_id.append(i.shortcode)
         likes.append(i.likes)
@@ -32,6 +39,7 @@ def get_postDetails(profile):
     return post_df
         
 def likesPerPost(post_df, username):
+    
     # Create plot and style. 
     plt.style.use('ggplot')
     fig, ax = plt.subplots(figsize=(12,4))
@@ -45,7 +53,6 @@ def likesPerPost(post_df, username):
     right_xlim=df["upload_date"].max()+datetime.timedelta(days=3)
     ax.set_xlim(left=left_xlim, right=right_xlim)
     
-    
     # Draw labels on plot. 
     ax.set_title("{} Instagram Likes per Post".format(username))
     ax.set_xlabel("Date")
@@ -54,6 +61,7 @@ def likesPerPost(post_df, username):
     plt.show()
     
 def likesVsComments(post_df, username):
+    
     # Create the figure
     fig, ax = plt.subplots(figsize=(12,4), facecolor="w")
     ax.set_yscale('log')
@@ -75,6 +83,7 @@ def likesVsComments(post_df, username):
     plt.show()
     
 def viewsVsLikes(post_df, username):
+    
     # Create figure and set logarithmic y-axis
     videos_df = post_df[post_df["is_video"]]
     fig, ax = plt.subplots(figsize=(12,4), facecolor='w')
@@ -96,10 +105,12 @@ def viewsVsLikes(post_df, username):
     ax.legend()
     plt.show()
 
-    
-profile_username = 'thetintedstory'
+'''
+profile_username = 'methodcandles'
 profile = get_profileObject(profile_username)
 df = get_postDetails(profile)
-viewsVsLikes(df, profile_username)
+likesVsComments(df, profile_username)
+'''    
+
 
            
