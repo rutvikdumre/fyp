@@ -1,1 +1,1 @@
-web: gunicorn app:app
+web: gunicorn project_b2.wsgi
