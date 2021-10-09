@@ -42,5 +42,7 @@
         </div>
     </main>
 </body>
-
+{% if data %}
+<img src="data:image/png;base64,{{ data }}" alt="" height="500" ,width="250">
+{% endif %}
 </html>

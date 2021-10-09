@@ -1,7 +1,7 @@
 import instaloader
 import pandas as pd
 import datetime
-
+import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 
@@ -104,6 +104,31 @@ def viewsVsLikes(post_df, username):
         matplotlib.ticker.FuncFormatter(lambda x, p: format(int(x), ',')))'''
     ax.legend()
     plt.show()
+
+def comp_followers(uids):
+    # uids=['techcommmpstme', 'sportscommittee.mpstme', 'culturalcommittee_mpstme']
+    followers=[]
+    media=[]
+    for i in uids:
+        profile=instaloader.Profile.from_username(insta.context, i)
+        followers += [profile.followers]
+        #media += [profile.mediacount]
+    X = uids
+    Y = followers
+    #Zboys = media
+
+    X_axis = np.arange(len(X))
+
+    plt.bar(X_axis , Y, label = 'Followers')
+    #plt.bar(X_axis + 0.2, Zboys, 0.4, label = 'Media Count')
+
+    plt.xticks(X_axis, X)
+    plt.xlabel("Users")
+    plt.ylabel("Count")
+    plt.title("Competetive Comparision")
+    plt.legend()
+    # plt.show()
+    return plt
 
 '''
 profile_username = 'methodcandles'
