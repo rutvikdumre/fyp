@@ -105,12 +105,9 @@ def viewsVsLikes(post_df, username):
     ax.legend()
     plt.show()
 
-'''
-profile_username = 'methodcandles'
+
+profile_username = 'parvdave29'
 profile = get_profileObject(profile_username)
 df = get_postDetails(profile)
-likesVsComments(df, profile_username)
-'''    
+likesPerPost(df, profile_username)
 
-
-           
