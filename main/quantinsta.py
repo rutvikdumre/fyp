@@ -38,15 +38,15 @@ def get_postDetails(profile):
     
     return post_df
         
-def likesPerPost(post_df, username):
+def likesPerPost(df, username):
     
     # Create plot and style. 
     plt.style.use('ggplot')
     fig, ax = plt.subplots(figsize=(12,4))
 
     # Draw scatter plot.
-    upload_date = post_df["upload_date"].to_numpy()
-    likes = post_df["likes"].to_numpy()
+    upload_date = df["upload_date"].to_numpy()
+    likes = df["likes"].to_numpy()
     ax.scatter(upload_date, likes, label="Post")
     
     left_xlim=df["upload_date"].min()-datetime.timedelta(days=3)
@@ -58,7 +58,7 @@ def likesPerPost(post_df, username):
     ax.set_xlabel("Date")
     ax.set_ylabel("Likes")
     
-    plt.show()
+    return plt
     
 def likesVsComments(post_df, username):
     
@@ -67,7 +67,7 @@ def likesVsComments(post_df, username):
     ax.set_yscale('log')
 
     # Draw the plots 
-    posts = [i for i in range(len(df))]
+    posts = [i for i in range(len(post_df))]
     likes = df['likes'].to_numpy()
     comments = df["comments"].to_numpy()
     ax.bar(posts, likes, label="Likes", width=1, color="#ff6b6b")
@@ -103,7 +103,7 @@ def viewsVsLikes(post_df, username):
     '''ax.get_yaxis().set_major_formatter(
         matplotlib.ticker.FuncFormatter(lambda x, p: format(int(x), ',')))'''
     ax.legend()
-    plt.show()
+    return plt
 
 def comp_followers(uids):
     # uids=['techcommmpstme', 'sportscommittee.mpstme', 'culturalcommittee_mpstme']
