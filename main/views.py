@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import matplotlib.pyplot as plt
 import io
 import urllib, base64
@@ -9,6 +9,9 @@ insta= instaloader.Instaloader()
 
 # Create your views here.
 def landing(request):
+    if request.method=='POST':
+        uid=request.POST.get('uid')
+        return redirect('/'+uid)
     return render(request,'main/index.html',{})
 
 def analytics_by_account(request,username):
