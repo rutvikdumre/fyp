@@ -25,14 +25,71 @@
     </header>
     <main class="my-auto">
         <div class="container">
-            <h1 class="page-title">Hey {{profile.username}}</h1>
-            <p class="page-description">Choose one of the following:
-            </p>
-            {% if data %}
-                <img src="data:image/png;base64,{{ data }}" alt="" height="250" ,width="125">
-            {% endif %}
-            
-        </div>
+            <h1 style="color: white;" class="mb-5">Search results from Twitter</h1>
+            <h2>Sentiment count:</h2>
+            <div class="table-responsive custom-table-responsive">
+              {% if pos is 0 and neg is 0 and neu is 0 %}
+              <h2 style="color: red;">No results found. Try reducing search parameters</h2>
+              {% endif %}
+              
+              <table class="table custom-table">
+                <thead>
+                  <th>Positive tweets</th>
+                  <th>Negative tweets</th>
+                  <th>Neutral tweets</th>
+                </thead>
+                <tbody>
+                <td>{{ pos }}</td>
+                <td>{{ neg }}</td>
+                <td>{{ neu }}</td>  
+                </tbody>
+              </table>
+              <div style="display:flex;justify-content: center;">
+                  {% if graph %}
+                    <img src='data:image/png;base64,{{ graph }}'>
+                  {% endif %}
+              </div>
+              
+              <h2>All information:</h2>
+              <div class="dropdown">
+                <form method="POST">
+                <label style="color: white;margin-right: 2%;" for="Sentiment">Choose a Sentiment:</label>
+                <select style="margin: 3%; border-radius: 12%;" name="Sentiment" id="Sentiment">
+                  <option value="All">All</option>
+                  <option value="Positive">Positive</option>
+                  <option value="Negative">Negative</option>
+                  <option value="Neutral">Neutral</option>
+                </select>
+                <input style="margin: 3%; border-radius: 12%;" type="submit">
+              </form>
+              </div>
+              
+              <table class="table custom-table">
+                <thead>
+                  <tr>  
+                    {% for header in headings %}
+                    <th scope="col">{{ header }}</th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for row in data %}
+                    <tr> 
+                      {% for item in row %}
+                      {% if forloop.first %}
+                      <td><a target="_blank" href="/user/{{ item }}">{{ item }}</a></td>
+                      {% else %}
+                      <td>{{ item }}</td>
+                      {% endif %}
+                      {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            </div>
+      
+      
+          </div>
     </main>
 </body>
 </html>
