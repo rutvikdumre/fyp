@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 import matplotlib.pyplot as plt
 import io
 import urllib, base64
@@ -12,7 +13,7 @@ insta= instaloader.Instaloader()
 def landing(request):
     if request.method=='POST':
         uid=request.POST.get('uid')
-        return redirect(reverse_lazy(f"main:analytics-by-topic '{uid}'"))
+        return redirect('topic/'+'{uid}')
     return render(request,'main/index.html',{})
 
 def analytics_by_account(request,username):

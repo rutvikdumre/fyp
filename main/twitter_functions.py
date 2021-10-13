@@ -19,12 +19,12 @@ def sentiment_scores(sentence):
     # which contains pos, neg, neu, and compound scores.
     sentiment_dict = sid_obj.polarity_scores(sentence)
       
-    print("Overall sentiment dictionary is : ", sentiment_dict)
+    '''print("Overall sentiment dictionary is : ", sentiment_dict)
     print("sentence was rated as ", sentiment_dict['neg']*100, "% Negative")
     print("sentence was rated as ", sentiment_dict['neu']*100, "% Neutral")
     print("sentence was rated as ", sentiment_dict['pos']*100, "% Positive")
   
-    print("Sentence Overall Rated As", end = " ")
+    print("Sentence Overall Rated As", end = " ")'''
   
     # decide sentiment as positive, negative and neutral
     if sentiment_dict['compound'] >= 0.05 :
@@ -129,5 +129,5 @@ def sentplot(df):
     fig=df['sentiment'].value_counts().plot(ax=ax, kind='barh')
     return plt
 twitter_credentials()
-df,p,n,g = twitter_query('covid')
-sentplot(df)
+'''df,p,n,g = twitter_query('covid')
+sentplot(df)'''
