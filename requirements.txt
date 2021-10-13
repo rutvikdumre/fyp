@@ -30,3 +30,4 @@ twython==3.9.1
 typing-extensions==3.10.0.2
 urllib3==1.26.6
 vader==0.0.2
+vaderSentiment==3.3.2
