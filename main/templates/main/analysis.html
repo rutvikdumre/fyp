@@ -49,6 +49,13 @@
                     <img src='data:image/png;base64,{{ graph }}'>
                   {% endif %}
               </div>
+              <br>
+              <h2>WordCloud for the Tweets:</h2>
+              <div style="display:flex;justify-content: center;">
+                {% if graph %}
+                  <img src='data:image/png;base64,{{ wordcloud }}'>
+                {% endif %}
+              </div>
               
               <h2>All information:</h2>
               <div class="dropdown">

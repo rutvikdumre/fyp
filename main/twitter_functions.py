@@ -6,6 +6,10 @@ import pandas as pd
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import matplotlib.pyplot as plt
 import tweepy
+from bs4 import BeautifulSoup
+from nltk.tokenize import WordPunctTokenizer
+import re
+from wordcloud import WordCloud, STOPWORDS
 
 # function to print sentiments
 # of the sentence.
@@ -128,6 +132,45 @@ def sentplot(df):
     fig, ax = plt.subplots()
     fig=df['sentiment'].value_counts().plot(ax=ax, kind='barh')
     return plt
+
+def tweetClean(df):
+    Tweet_Texts=df['text'].values
+    Tweets_String=str(Tweet_Texts)
+    Tweet_Texts_Cleaned = Tweets_String.lower()
+    Tweet_Texts_Cleaned=re.sub(r'@\w+', ' ', Tweet_Texts_Cleaned)
+    Tweet_Texts_Cleaned=re.sub(r'http\S+', ' ', Tweet_Texts_Cleaned)
+    # Deleting everything which is not characters
+    Tweet_Texts_Cleaned = re.sub(r'[^a-z A-Z]', ' ',Tweet_Texts_Cleaned)
+    
+    # Deleting any word which is less than 3-characters mostly those are stopwords
+    Tweet_Texts_Cleaned= re.sub(r'\b\w{1,2}\b', '', Tweet_Texts_Cleaned)
+    
+    # Stripping extra spaces in the text
+    Tweet_Texts_Cleaned= re.sub(r' +', ' ', Tweet_Texts_Cleaned)
+    
+    return Tweet_Texts_Cleaned
+
+def wordcloud(Tweet_Texts_Cleaned):
+    # Creating the custom stopwords
+    customStopwords=list(STOPWORDS)+ ['cases','corona','virus','people','will']
+    
+    wordcloudimage = WordCloud(
+                            max_words=100,
+                            max_font_size=500,
+                            font_step=2,
+                            stopwords=customStopwords,
+                            background_color='white',
+                            width=1000,
+                            height=720
+                            ).generate(Tweet_Texts_Cleaned)
+    
+    plt.figure(figsize=(15,7))
+    plt.axis("off")
+    plt.imshow(wordcloudimage)
+    #wordcloudimage
+    #plt.show()
+    return plt
+
 twitter_credentials()
 '''df,p,n,g = twitter_query('covid')
-sentplot(df)'''
+wordcloud(tweetClean(df))'''

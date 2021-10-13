@@ -41,8 +41,18 @@ def analytics_by_topic(request,topic):
     buf.seek(0)
     string = base64.b64encode(buf.read())
     uri =  urllib.parse.quote(string)
+    #wordcloud
+    fig = twitter_functions.wordcloud(twitter_functions.tweetClean(df))
 
-    return render(request,'main/analysis.html',{'graph':uri,'data':rows,'topic':topic,'pos':positive,'neg':negative,'neu':neutral})
+    rows=list(df.itertuples(index=False))
+
+    buf1 = io.BytesIO()
+    fig.savefig(buf1,format='png')
+    buf1.seek(0)
+    string1 = base64.b64encode(buf1.read())
+    uri1 =  urllib.parse.quote(string1)
+
+    return render(request,'main/analysis.html',{'graph':uri,'wordcloud': uri1,'data':rows,'topic':topic,'pos':positive,'neg':negative,'neu':neutral})
 
 
 def likes_per_post(request,username,mode):
