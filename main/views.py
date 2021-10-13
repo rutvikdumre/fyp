@@ -30,7 +30,7 @@ def analytics_by_account(request,username):
 
 def analytics_by_topic(request,topic):
     twitter_functions.twitter_credentials()
-    df,positive,negative,neutral = twitter_functions.twitter_query('covid')
+    df,positive,negative,neutral = twitter_functions.twitter_query(topic)
     df=df.iloc[:,:]
     fig = twitter_functions.sentplot(df)
 
