@@ -130,7 +130,8 @@ def getinfo(name):
     
 def sentplot(df):
     fig, ax = plt.subplots()
-    fig=df['sentiment'].value_counts().plot(ax=ax, kind='barh')
+    color_dict = {'Positive':'#6ab04c', 'Negative':'#eb4d4b', 'Neutral':'#22a6b3'}
+    fig=df['sentiment'].value_counts().plot(ax=ax, kind='barh',color=df['sentiment'].replace(color_dict))
     return plt
 
 def tweetClean(df):
