@@ -13,7 +13,7 @@ insta= instaloader.Instaloader()
 def landing(request):
     if request.method=='POST':
         uid=request.POST.get('uid')
-        return redirect('topic/'+'{uid}')
+        return redirect('topic/'+uid)
     return render(request,'main/index.html',{})
 
 def analytics_by_account(request,username):
