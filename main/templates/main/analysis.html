@@ -53,6 +53,7 @@
               <h2>All information:</h2>
               <div class="dropdown">
                 <form method="POST">
+                  {% csrf_token %}
                 <label style="color: white;margin-right: 2%;" for="Sentiment">Choose a Sentiment:</label>
                 <select style="margin: 3%; border-radius: 12%;" name="Sentiment" id="Sentiment">
                   <option value="All">All</option>
