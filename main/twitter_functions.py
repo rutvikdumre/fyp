@@ -43,10 +43,10 @@ def sentiment_scores(sentence):
 def twitter_credentials():
     # Enter your keys/secrets as strings in the following fields
     credentials = {}
-    credentials['CONSUMER_KEY'] = 'zgU92rH9lXYJeDK6otwie8Wpr'
-    credentials['CONSUMER_SECRET'] = 'x13U1nq7z11sXOSoB2CDeADiKfBAyN2N8G8Dki4hc6D0J6Cb9I'
-    credentials['ACCESS_TOKEN'] = '1390534356796514304-a9OrHPnkGQQTTwRZVUK5UuOf01l1ss'
-    credentials['ACCESS_SECRET'] = 'QkexVBujL2fZiu3FVipn9Zmf0aaZ0PQfBkJZ4PlahFK8K'
+    credentials['CONSUMER_KEY'] = 'as6IxOQ0arO7AznKoPUfLQt5l'
+    credentials['CONSUMER_SECRET'] = 'a9CHQVAvui2BuxXVKAqBHOBDOiGex1iFAb8vaHtKDT91ni4nBz'
+    credentials['ACCESS_TOKEN'] = '1390534356796514304-AX2lcuHToECxxzl5HtBqU4SPZD05lc'
+    credentials['ACCESS_SECRET'] = 'MbXWOuYOjljxe90NgOJGiYSu46fX7AQ020RtwpaKOwQyG'
 
     # Save the credentials object to file
     with open("twitter_credentials.json", "w") as file:
@@ -106,10 +106,10 @@ def getinfo(name):
 
     # assign the values accordingly
 
-    consumer_key = 'zgU92rH9lXYJeDK6otwie8Wpr'
-    consumer_secret = 'x13U1nq7z11sXOSoB2CDeADiKfBAyN2N8G8Dki4hc6D0J6Cb9I'
-    access_token =  '1390534356796514304-a9OrHPnkGQQTTwRZVUK5UuOf01l1ss'
-    access_token_secret = 'QkexVBujL2fZiu3FVipn9Zmf0aaZ0PQfBkJZ4PlahFK8K'
+    consumer_key = 'as6IxOQ0arO7AznKoPUfLQt5l'
+    consumer_secret = 'a9CHQVAvui2BuxXVKAqBHOBDOiGex1iFAb8vaHtKDT91ni4nBz'
+    access_token =  '1390534356796514304-AX2lcuHToECxxzl5HtBqU4SPZD05lc'
+    access_token_secret = 'MbXWOuYOjljxe90NgOJGiYSu46fX7AQ020RtwpaKOwQyG'
     
     # authorization of consumer key and consumer secret
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
