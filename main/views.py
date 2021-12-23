@@ -6,15 +6,22 @@ import urllib, base64
 from . import quantinsta
 import instaloader
 from . import twitter_functions
+from .models import *
 
 insta= instaloader.Instaloader()
 
 # Create your views here.
 def landing(request):
-    if request.method=='POST':
-        uid=request.POST.get('uid')
-        return redirect('topic/'+uid)
-    return render(request,'main/index.html',{})
+    if request.user.is_authenticated:
+        if request.method=='POST':
+            uid=request.POST.get('uid')
+            userb2 = UserB2.objects.filter(user=request.user).first()
+            user_history = userb2.history
+            print(user_history)
+            return redirect('topic/'+uid)
+        return render(request,'main/index.html',{})
+    else:
+        return redirect('main:login-view')
 
 def analytics_by_account(request,username):
     
