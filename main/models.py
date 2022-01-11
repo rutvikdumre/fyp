@@ -9,4 +9,4 @@ class UserB2(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    # history = models.JSONField(default=set)
+    history = models.JSONField(default=set)

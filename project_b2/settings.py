@@ -74,22 +74,22 @@ WSGI_APPLICATION = 'project_b2.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'djongo',
-#         'NAME': 'project_b2',
-#         'CLIENT': {
-#             'host': "mongodb+srv://parvdave:admin@cluster0.rpt2e.mongodb.net/test?retryWrites=true&w=majority"
-#         },
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'djongo',
+        'NAME': 'project_b2',
+        'CLIENT': {
+            'host': "mongodb+srv://parvdave:admin@cluster0.rpt2e.mongodb.net/test?retryWrites=true&w=majority"
+        },
+    }
+}
 
 
 # Password validation
