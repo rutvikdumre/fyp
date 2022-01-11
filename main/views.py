@@ -3,12 +3,11 @@ from django.urls import reverse_lazy
 import matplotlib.pyplot as plt
 import io
 import urllib, base64
-from . import quantinsta
-import instaloader
+# from . import quantinsta
 from . import twitter_functions
 from .models import *
 
-insta= instaloader.Instaloader()
+# insta= instaloader.Instaloader()
 
 # Create your views here.
 def landing(request):
