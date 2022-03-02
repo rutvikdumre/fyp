@@ -43,10 +43,10 @@ def sentiment_scores(sentence):
 def twitter_credentials():
     # Enter your keys/secrets as strings in the following fields
     credentials = {}
-    credentials['CONSUMER_KEY'] = 'as6IxOQ0arO7AznKoPUfLQt5l'
-    credentials['CONSUMER_SECRET'] = 'a9CHQVAvui2BuxXVKAqBHOBDOiGex1iFAb8vaHtKDT91ni4nBz'
-    credentials['ACCESS_TOKEN'] = '1390534356796514304-AX2lcuHToECxxzl5HtBqU4SPZD05lc'
-    credentials['ACCESS_SECRET'] = 'MbXWOuYOjljxe90NgOJGiYSu46fX7AQ020RtwpaKOwQyG'
+    credentials['CONSUMER_KEY'] = 'Tm30Tmmk1eaEzbi23Nm3NU1g5'
+    credentials['CONSUMER_SECRET'] = 'jId4w7i1QLJGqv3JnlM33N9ZzZEhP1QmYu6RzaBYarrNM5HAzG'
+    credentials['ACCESS_TOKEN'] = '1390534356796514304-5KUsYqQaXJXxKwauEupXT7UtkYLAmY'
+    credentials['ACCESS_SECRET'] = 'U4nDzR99UsH8aCuKB9ntLGbZLCwwoDkLLjt0A3FvwngT1'
 
     # Save the credentials object to file
     with open("twitter_credentials.json", "w") as file:

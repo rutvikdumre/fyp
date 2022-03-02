@@ -14,6 +14,16 @@
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/bd-coming-soon.css' %}">
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+	<link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}">
+
+    <link rel="stylesheet" href="{% static 'signup-form-07/css/owl.carousel.min.css' %}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'signup-form-07/css/bootstrap.min.css' %}">
+    
+    <!-- Style -->
+    <link rel="stylesheet" href="{% static 'signup-form-07/css/style.css' %}">
+	
 </head>
 <style>
 	.register
@@ -70,8 +80,11 @@
 							<a href="#" style="color: #fff">Forgot Password</a>
 						</div>
 	            	</div> -->
-					<button class="form-control btn btn-primary submit px-3">Log In</button>
+					<a href="{% url 'main:login-view' %}"><button class="form-control btn btn-primary submit px-3">Log In</button></a>
+					<br><br><br>
+					
 	          	</form>
+				  <a href="{% url 'main:register-view' %}"><button class="form-control btn btn-primary submit px-3">Register</button></a>
 	          <p class="w-100 text-center">&mdash; Or Sign In With &mdash;</p>
 						<div class="social d-flex text-center">
 
@@ -91,4 +104,8 @@
   <script src="{% static 'js/popper.js' %}"></script>
   <script src="{% static 'js/bootstrap.min.js' %}"></script>
   <script src="{% static 'js/main.js' %}"></script>
+  <script src="{% static 'signup-form-07/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'signup-form-07/js/popper.min.js' %}"></script>
+    <script src="{% static 'signup-form-07/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'signup-form-07/js/main.js' %}"></script>
 </html>

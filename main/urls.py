@@ -11,5 +11,6 @@ urlpatterns = [
     path('logout/',auth_views.LogoutView.as_view(template_name='main/logout.html'),name='logout-view'),
     path('user/<str:username>',views.analytics_by_account,name='analytics-by-account'),
     path('topic/<str:topic>',views.analytics_by_topic,name='analytics-by-topic'),
-    path('user/<str:username>/<str:mode>',views.likes_per_post,name='likes-per-post')
+    path('user/<str:username>/<str:mode>',views.likes_per_post,name='likes-per-post'),
+    path('register/',views.register,name='register-view')
 ]
