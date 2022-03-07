@@ -173,5 +173,38 @@ def wordcloud(Tweet_Texts_Cleaned):
     return plt
 
 twitter_credentials()
-'''df,p,n,g = twitter_query('covid')
-wordcloud(tweetClean(df))'''
+
+
+
+def score_compare(users):
+    screenname = []
+    no_ofLikes = []
+    no_ofFollowing = []
+    no_ofTweetsCount = []
+    no_ofFollowers = []
+    
+    api = tweepy.API(auth)
+    error=[]
+    for name in users:
+        try:
+            results = api.get_user(id=name)
+            screenname.append(results.screen_name)
+            no_ofFollowers.append(results.followers_count)
+            no_ofLikes.append(results.favourites_count)
+            no_ofFollowing.append(results.friends_count)
+            no_ofTweetsCount.append(results.statuses_count) 
+        except:
+            error+=['Problem with the username:{}'.format('name')]
+            print(error)
+
+        dict_tweets = {'screenname': screenname, 'no_of_likes':no_ofLikes, 'no_of_followers':no_ofFollowers, 'no_of_following':no_ofFollowing, 'tweet_count':no_ofTweetsCount}
+        df_tweets = pd.DataFrame(dict_tweets)
+        df_tweets['reach_score']=df_tweets['no_of_followers']-df_tweets['no_of_following']
+        df_tweets['popularity_score']=df_tweets['no_of_likes']+df_tweets['tweet_count']
+
+    print(df_tweets.head)
+    pd.options.plotting.backend = "plotly"
+
+    fig=df_tweets.plot.bar(y='screenname', x="popularity_score")
+    fig.write_html("file.html")
+            
