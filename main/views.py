@@ -7,6 +7,7 @@ from . import quantinsta
 from . import twitter_functions
 from .models import *
 from .forms import RegisterForm
+from django.template.loader import render_to_string, get_template
 
 
 # Create your views here.
@@ -17,7 +18,10 @@ def landing(request): # Landing Page View
             uid=request.POST.get('uid')
             # print(user_history)
             return redirect('topic/'+uid)
-        return render(request,'main/index.html',{})
+        
+        br = render_to_string('main/file.html')
+        print(br)
+        return render(request,'main/index.html',{'br':br})
     else:
         return redirect('main:login-view')
 
