@@ -1,42 +1,10 @@
-import instaloader
 import pandas as pd
 import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 
-insta= instaloader.Instaloader()
-username= 'sendmomo'
 
-def get_profileObject(username):
-    '''
-    Retrieve a profile object for a given username
-    '''
-    profile = instaloader.Profile.from_username(insta.context, username)
-    return profile
-
-def get_profileDetails(profile):
-    followers = profile.followers
-    media_count = profile.mediacount
-    
-def get_postDetails(profile):
-    '''
-    Retrieve attributes for all posts of a user
-    profile - profile object for a particular user
-    '''
-    post_id, likes, comments, is_video, video_view_count, date = ([] for i in range(6)) # post_id - post shortcode
-    for i in profile.get_posts():
-        post_id.append(i.shortcode)
-        likes.append(i.likes)
-        comments.append(i.comments)
-        is_video.append(i.is_video)
-        video_view_count.append(i.video_view_count)
-        date.append(i.date)
-
-    post_df = pd.DataFrame(data={'id':post_id, 'likes':likes, 'comments':comments, 
-                                'is_video':is_video, 'video_view_count':video_view_count,'upload_date':date})
-    
-    return post_df
         
 def likesPerPost(df, username):
     
@@ -131,8 +99,4 @@ def comp_followers(uids):
     return plt
 
 
-profile_username = 'parvdave29'
-profile = get_profileObject(profile_username)
-df = get_postDetails(profile)
-likesPerPost(df, profile_username)
 
