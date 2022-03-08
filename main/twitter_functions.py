@@ -10,6 +10,10 @@ from bs4 import BeautifulSoup
 from nltk.tokenize import WordPunctTokenizer
 import re
 from wordcloud import WordCloud, STOPWORDS
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+import plotly.express as px
+import plotly.graph_objects as go
+
 
 # function to print sentiments
 # of the sentence.
@@ -43,10 +47,10 @@ def sentiment_scores(sentence):
 def twitter_credentials():
     # Enter your keys/secrets as strings in the following fields
     credentials = {}
-    credentials['CONSUMER_KEY'] = 'as6IxOQ0arO7AznKoPUfLQt5l'
-    credentials['CONSUMER_SECRET'] = 'a9CHQVAvui2BuxXVKAqBHOBDOiGex1iFAb8vaHtKDT91ni4nBz'
-    credentials['ACCESS_TOKEN'] = '1390534356796514304-AX2lcuHToECxxzl5HtBqU4SPZD05lc'
-    credentials['ACCESS_SECRET'] = 'MbXWOuYOjljxe90NgOJGiYSu46fX7AQ020RtwpaKOwQyG'
+    credentials['CONSUMER_KEY'] = 'Tm30Tmmk1eaEzbi23Nm3NU1g5'
+    credentials['CONSUMER_SECRET'] = 'jId4w7i1QLJGqv3JnlM33N9ZzZEhP1QmYu6RzaBYarrNM5HAzG'
+    credentials['ACCESS_TOKEN'] = '1390534356796514304-5KUsYqQaXJXxKwauEupXT7UtkYLAmY'
+    credentials['ACCESS_SECRET'] = 'U4nDzR99UsH8aCuKB9ntLGbZLCwwoDkLLjt0A3FvwngT1'
 
     # Save the credentials object to file
     with open("twitter_credentials.json", "w") as file:
@@ -106,10 +110,10 @@ def getinfo(name):
 
     # assign the values accordingly
 
-    consumer_key = 'as6IxOQ0arO7AznKoPUfLQt5l'
-    consumer_secret = 'a9CHQVAvui2BuxXVKAqBHOBDOiGex1iFAb8vaHtKDT91ni4nBz'
-    access_token =  '1390534356796514304-AX2lcuHToECxxzl5HtBqU4SPZD05lc'
-    access_token_secret = 'MbXWOuYOjljxe90NgOJGiYSu46fX7AQ020RtwpaKOwQyG'
+    consumer_key = "Tm30Tmmk1eaEzbi23Nm3NU1g5"
+    consumer_secret = "jId4w7i1QLJGqv3JnlM33N9ZzZEhP1QmYu6RzaBYarrNM5HAzG"
+    access_token = "1390534356796514304-5KUsYqQaXJXxKwauEupXT7UtkYLAmY"
+    access_token_secret = "U4nDzR99UsH8aCuKB9ntLGbZLCwwoDkLLjt0A3FvwngT1"
     
     # authorization of consumer key and consumer secret
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
@@ -173,5 +177,115 @@ def wordcloud(Tweet_Texts_Cleaned):
     return plt
 
 twitter_credentials()
-'''df,p,n,g = twitter_query('covid')
-wordcloud(tweetClean(df))'''
+
+def inf_calc_users(pop,reach):
+
+  x_pop = ctrl.Antecedent(np.arange(0, 1.1, 0.1), 'x_pop')      #final['popularity_score'].to_numpy()
+  x_reach = ctrl.Antecedent(np.arange(0, 1.1, 0.1), 'x_reach')    #final['reach_score'].to_numpy()
+
+  x_inf  = ctrl.Consequent(np.arange(0, 1.1, 0.1), 'x_inf')
+
+  x_pop['low'] = fuzz.trimf(x_pop.universe, [0, 0, 0.5])
+  x_pop['med'] = fuzz.trimf(x_pop.universe, [0, 0.5, 1])
+  x_pop['high'] = fuzz.trimf(x_pop.universe, [0.5, 1, 1])
+
+  x_reach['low'] = fuzz.trimf(x_reach.universe, [0, 0, 0.5])
+  x_reach['med'] = fuzz.trimf(x_reach.universe, [0, 0.5, 1])
+  x_reach['high'] = fuzz.trimf(x_reach.universe, [0.5, 1, 1])
+
+  x_inf['low'] = fuzz.trimf(x_inf.universe, [0, 0, 0.5])
+  x_inf['med'] = fuzz.trimf(x_inf.universe, [0, 0.5, 1])
+  x_inf['high'] = fuzz.trimf(x_inf.universe, [0.5, 1, 1])
+
+
+  rule1 = ctrl.Rule(x_pop['low'] & x_reach['low'], x_inf['low'])
+  rule2 = ctrl.Rule((x_pop['med'] | x_reach['med']), x_inf['med'])
+  rule3 = ctrl.Rule(x_pop['high'] | x_reach['high'], x_inf['high'])
+
+  influence_ctrl = ctrl.ControlSystem([rule1, rule2, rule3])
+  influence = ctrl.ControlSystemSimulation(influence_ctrl)
+
+
+  # Pass inputs to the ControlSystem using Antecedent labels with Pythonic API
+  # Note: if you like passing many inputs all at once, use .inputs(dict_of_data)
+  influence.input['x_pop'] = pop
+  influence.input['x_reach'] = reach
+
+  # Crunch the numbers
+  influence.compute()
+  inf=influence.output['x_inf']
+
+  return inf
+
+def score_compare(users):
+    screenname = []
+    no_ofLikes = []
+    no_ofFollowing = []
+    no_ofTweetsCount = []
+    no_ofFollowers = []
+
+    consumer_key = "Tm30Tmmk1eaEzbi23Nm3NU1g5"
+    consumer_secret = "jId4w7i1QLJGqv3JnlM33N9ZzZEhP1QmYu6RzaBYarrNM5HAzG"
+    access_token = "1390534356796514304-5KUsYqQaXJXxKwauEupXT7UtkYLAmY"
+    access_token_secret = "U4nDzR99UsH8aCuKB9ntLGbZLCwwoDkLLjt0A3FvwngT1"
+    
+    # authorization of consumer key and consumer secret
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    
+    # set access to user's access key and access secret 
+    auth.set_access_token(access_token, access_token_secret)
+    
+    api = tweepy.API(auth)
+    error=[]
+    for name in users:
+        try:
+            print('user: {}'.format(name.strip()))
+            results = api.get_user(screen_name=name.strip())
+            
+            screenname.append(results.screen_name)
+            no_ofFollowers.append(results.followers_count)
+            no_ofLikes.append(results.favourites_count)
+            no_ofFollowing.append(results.friends_count)
+            no_ofTweetsCount.append(results.statuses_count) 
+        except Exception as e:
+            error+=['Problem with the username:"{}"'.format(name)]
+            print(e)
+
+        dict_tweets = {'screenname': screenname, 'no_of_likes':no_ofLikes, 'no_of_followers':no_ofFollowers, 'no_of_following':no_ofFollowing, 'tweet_count':no_ofTweetsCount}
+        df_tweets = pd.DataFrame(dict_tweets)
+        df_tweets['reach_score']=df_tweets['no_of_followers']-df_tweets['no_of_following']
+        df_tweets['popularity_score']=df_tweets['no_of_likes']+df_tweets['tweet_count']
+        
+    pd.options.plotting.backend = "plotly"
+
+
+    # Likes
+
+    fig0 = go.Figure(data=[go.Pie(labels=df_tweets['screenname'], values=df_tweets['no_of_likes'], hole=.3)])
+    fig0.write_html('template/main/likes.html')
+
+    # Popularity Score and Reach score
+
+    fig1=df_tweets.plot.bar(y='screenname', x="popularity_score")
+    fig1.write_html("template/main/pop.html")
+
+    fig2 = df_tweets.plot.bar(y='screenname', x="reach_score")
+    fig2.write_html("template/main/reach.html")
+
+    # Normalisation and Influencer score calculation
+
+    scaler = MinMaxScaler(feature_range=(0,1))
+    df_tweets[['popularity_score', 'reach_score']]= scaler.fit_transform(df_tweets[['popularity_score', 'reach_score']])
+
+    inf=[]
+    for index, i in df_tweets.iterrows():
+      inf+=[inf_calc_users(i['popularity_score'],i['reach_score'])]
+    df_tweets['inf']=inf
+
+
+    print(df_tweets.head)
+
+
+    fig3 = df_tweets.plot.bar(y='screenname', x="inf")
+    fig3.write_html("template/main/inf.html")
+            

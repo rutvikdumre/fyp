@@ -4,27 +4,42 @@ import matplotlib.pyplot as plt
 import io
 import urllib, base64
 from . import quantinsta
-import instaloader
 from . import twitter_functions
+from .models import *
+from .forms import RegisterForm
+from django.template.loader import render_to_string, get_template
 
-insta= instaloader.Instaloader()
 
 # Create your views here.
-def landing(request):
-    if request.method=='POST':
-        uid=request.POST.get('uid')
-        return redirect('topic/'+uid)
-    return render(request,'main/index.html',{})
+
+def landing(request): # Landing Page View
+    if request.user.is_authenticated:
+        if request.method=='POST':
+            uid=request.POST.get('uid')
+            # print(user_history)
+            return redirect('topic/'+uid)
+        
+        br = render_to_string('main/file.html')
+        print(br)
+        return render(request,'main/index.html',{'br':br})
+    else:
+        return redirect('main:login-view')
+
+def register(response):
+    if response.method=='POST':
+        form=RegisterForm(response.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('main:landing-page')
+    else:
+        form=RegisterForm()
+    return render(response, "main/register.html", {'form':form})
+
+
 
 def analytics_by_account(request,username):
     
-    profile=instaloader.Profile.from_username(insta.context, username)
-    # fig = quantinsta.comp_followers([username])
-    # buf = io.BytesIO()
-    # fig.savefig(buf,format='png')
-    # buf.seek(0)
-    # string = base64.b64encode(buf.read())
-    # uri =  urllib.parse.quote(string)
+    
     modes = {'likesperpost':{'name':'Likes per post'},'viewsvslikes':{'name':'Views vs Likes'},'compfollowers':{'name':'Followers comparison'}}
     return render(request,'main/options.html',{'profile':profile,'username':username,'modes':modes})
 
@@ -55,24 +70,16 @@ def analytics_by_topic(request,topic):
     return render(request,'main/analysis.html',{'graph':uri,'wordcloud': uri1,'data':rows,'topic':topic,'pos':positive,'neg':negative,'neu':neutral})
 
 
-def likes_per_post(request,username,mode):
-    profile = quantinsta.get_profileObject(username)
-    df = quantinsta.get_postDetails(profile)
-
-    if mode == 'likesperpost':
-        fig = quantinsta.likesPerPost(df, username)
-    elif mode == 'viewsvslikes':
-        fig = quantinsta.viewsVsLikes(df, username)
-    elif mode == 'compfollowers':
-        fig = quantinsta.comp_followers([username])
-    buf = io.BytesIO()
-    fig.savefig(buf,format='png')
-    buf.seek(0)
-    string = base64.b64encode(buf.read())
-    uri =  urllib.parse.quote(string)
-
-    return render(request,'main/analysis.html',{'data':uri,'username':username})
-
+def compete(request):
+    if request.method=='POST':
+        uid=request.POST.get('uid')
+        twitter_functions.score_compare(uid.split(","))
+        inf = render_to_string('main/inf.html')
+        reach = render_to_string('main/reach.html')
+        pop = render_to_string('main/pop.html')
+        return render(request, "main/user_comp.html", {'pop': pop, 'reach': reach, 'inf':inf} )
+    return render(request, "main/user_input.html")
+    
 
 # likesPerPost
 # viewsvslikes

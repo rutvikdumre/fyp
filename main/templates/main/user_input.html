@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en">
+    <form  method="POST" id="myform">
+        {% csrf_token %}
+        <label for="fname">Enter uids (comma seperated):</label><br>
+        <input type="text" id="uid" name="uid">
+        <input type="submit" value="Submit"><br><br>
+    </form>
+</html>

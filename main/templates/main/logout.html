@@ -1,0 +1,94 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Project B2 - Login</title>
+    <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.8.95/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bd-coming-soon.css' %}">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<style>
+	.register
+	{
+		background:#74BE85 !important;
+		border: 1px solid #74BE85 !important;
+	}
+</style>
+<body class="min-vh-100 d-flex flex-column">
+
+    <header>
+        <div class="container">
+            <nav class="navbar navbar-dark bg-transparenet">
+                <a class="navbar-brand" href="#">
+                    <img src="{% static 'images/logo.png' %}" alt="logo">
+                </a>
+                <span class="navbar-text ml-auto d-none d-sm-inline-block">026-027-031 </span>
+                <span class="navbar-text d-none d-sm-inline-block">project.bravo2@gmail.com</span>
+            </nav>
+        </div>
+    </header>
+    <section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-6 col-lg-4">
+					<div class="login-wrap p-0">
+                <h3 class="mb-4 text-center">You have been logged out!</h3>
+		      	<h3 class="mb-4 text-center">Have an account?</h3>
+				  <a href="{% url 'main:login-view' %}"><button class="form-control btn btn-primary submit px-3">Log In</button></a>
+				  
+					<!-- <div class="form-group">
+						<input type="text" class="form-control" placeholder="Username" required>
+					</div>
+					<div class="form-group">
+					<input id="password-field" type="password" class="form-control" placeholder="Password" required>
+					<span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+					</div>
+					<div class="form-group">
+						<a><button class="form-control btn btn-primary submit px-3">Sign In</button></a>
+					</div>
+					<div class="form-group">
+						<a><button class="form-control btn btn-primary submit px-3 register">Register</button></a>
+					</div> -->
+				<!-- <div class="form-group d-md-flex">
+						<div class="w-50">
+							<label class="checkbox-wrap checkbox-primary">Remember Me
+								<input type="checkbox" checked>
+								<span class="checkmark"></span>
+							</label>
+						</div>
+						<div class="w-50 text-md-right">
+							<a href="#" style="color: #fff">Forgot Password</a>
+						</div>
+	            	</div> -->
+	          <p class="w-100 text-center">&mdash; Or Sign In With &mdash;</p>
+						<div class="social d-flex text-center">
+
+							<a href="#" class="px-2 py-2 ml-md-1 rounded"><span class="ion-logo-twitter mr-2"></span> Twitter</a>
+							
+						</div>
+						<h3 class="mb-4 text-center">OR</h3>
+				<a href="{% url 'main:register-view' %}"><button class="form-control btn btn-primary submit px-3">Register</button></a>
+		      		</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+{% if data %}
+<img src="data:image/png;base64,{{ data }}" alt="" height="500" ,width="250">
+{% endif %}
+<script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/popper.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+</html>
