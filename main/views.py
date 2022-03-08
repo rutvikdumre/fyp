@@ -73,6 +73,7 @@ def likes_per_post(request,username,mode):
 
     return render(request,'main/analysis.html',{'data':uri,'username':username})
 
+
 # likesPerPost
 # viewsvslikes
 # comp_followers
