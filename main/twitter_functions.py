@@ -10,6 +10,10 @@ from bs4 import BeautifulSoup
 from nltk.tokenize import WordPunctTokenizer
 import re
 from wordcloud import WordCloud, STOPWORDS
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+import plotly.express as px
+import plotly.graph_objects as go
+
 
 # function to print sentiments
 # of the sentence.
@@ -174,7 +178,44 @@ def wordcloud(Tweet_Texts_Cleaned):
 
 twitter_credentials()
 
+def inf_calc_users(pop,reach):
 
+  x_pop = ctrl.Antecedent(np.arange(0, 1.1, 0.1), 'x_pop')      #final['popularity_score'].to_numpy()
+  x_reach = ctrl.Antecedent(np.arange(0, 1.1, 0.1), 'x_reach')    #final['reach_score'].to_numpy()
+
+  x_inf  = ctrl.Consequent(np.arange(0, 1.1, 0.1), 'x_inf')
+
+  x_pop['low'] = fuzz.trimf(x_pop.universe, [0, 0, 0.5])
+  x_pop['med'] = fuzz.trimf(x_pop.universe, [0, 0.5, 1])
+  x_pop['high'] = fuzz.trimf(x_pop.universe, [0.5, 1, 1])
+
+  x_reach['low'] = fuzz.trimf(x_reach.universe, [0, 0, 0.5])
+  x_reach['med'] = fuzz.trimf(x_reach.universe, [0, 0.5, 1])
+  x_reach['high'] = fuzz.trimf(x_reach.universe, [0.5, 1, 1])
+
+  x_inf['low'] = fuzz.trimf(x_inf.universe, [0, 0, 0.5])
+  x_inf['med'] = fuzz.trimf(x_inf.universe, [0, 0.5, 1])
+  x_inf['high'] = fuzz.trimf(x_inf.universe, [0.5, 1, 1])
+
+
+  rule1 = ctrl.Rule(x_pop['low'] & x_reach['low'], x_inf['low'])
+  rule2 = ctrl.Rule((x_pop['med'] | x_reach['med']), x_inf['med'])
+  rule3 = ctrl.Rule(x_pop['high'] | x_reach['high'], x_inf['high'])
+
+  influence_ctrl = ctrl.ControlSystem([rule1, rule2, rule3])
+  influence = ctrl.ControlSystemSimulation(influence_ctrl)
+
+
+  # Pass inputs to the ControlSystem using Antecedent labels with Pythonic API
+  # Note: if you like passing many inputs all at once, use .inputs(dict_of_data)
+  influence.input['x_pop'] = pop
+  influence.input['x_reach'] = reach
+
+  # Crunch the numbers
+  influence.compute()
+  inf=influence.output['x_inf']
+
+  return inf
 
 def score_compare(users):
     screenname = []
@@ -202,9 +243,38 @@ def score_compare(users):
         df_tweets['reach_score']=df_tweets['no_of_followers']-df_tweets['no_of_following']
         df_tweets['popularity_score']=df_tweets['no_of_likes']+df_tweets['tweet_count']
 
+
     print(df_tweets.head)
     pd.options.plotting.backend = "plotly"
 
-    fig=df_tweets.plot.bar(y='screenname', x="popularity_score")
-    fig.write_html("file.html")
+
+    # Likes
+
+    fig0 = go.Figure(data=[go.Pie(labels=df_tweets['screenname'], values=df_tweets['no_of_likes'], hole=.3)])
+    fig0.write_html('likes.html')
+
+    # Popularity Score and Reach score
+
+    fig1=df_tweets.plot.bar(y='screenname', x="popularity_score")
+    fig1.write_html("pop.html")
+
+    fig2 = df_tweets.plot.bar(y='screenname', x="reach_score")
+    fig2.write_html("reach.html")
+
+    # Normalisation and Influencer score calculation
+
+    scaler = MinMaxScaler(feature_range=(0,1))
+    df_tweets[['popularity_score', 'reach_score']]= scaler.fit_transform(df_tweets[['popularity_score', 'reach_score']])
+
+    inf=[]
+    for index, i in df_tweets.iterrows():
+      inf+=[inf_calc_users(i['popularity_score'],i['reach_score'])]
+    df_tweets['inf']=inf
+
+
+    print(df_tweets.head)
+
+
+    fig3 = df_tweets.plot.bar(y='screenname', x="inf")
+    fig3.write_html("inf.html")
             
