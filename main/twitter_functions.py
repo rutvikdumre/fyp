@@ -13,6 +13,23 @@ from wordcloud import WordCloud, STOPWORDS
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 import plotly.express as px
 import plotly.graph_objects as go
+import numpy as np
+import skfuzzy as fuzz
+from skfuzzy import control as ctrl
+
+
+
+consumer_key = "Tm30Tmmk1eaEzbi23Nm3NU1g5"
+consumer_secret = "jId4w7i1QLJGqv3JnlM33N9ZzZEhP1QmYu6RzaBYarrNM5HAzG"
+access_token = "1390534356796514304-5KUsYqQaXJXxKwauEupXT7UtkYLAmY"
+access_token_secret = "U4nDzR99UsH8aCuKB9ntLGbZLCwwoDkLLjt0A3FvwngT1"
+# Creating the authentication object
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+# Setting your access token and secret
+auth.set_access_token(access_token, access_token_secret)
+# Creating the API object while passing in auth information
+api = tweepy.API(auth)
+
 
 
 
@@ -229,7 +246,7 @@ def score_compare(users):
     error=[]
     for name in users:
         try:
-            results = api.get_user(id=name)
+            results = api.get_user(screen_name=name)
             screenname.append(results.screen_name)
             no_ofFollowers.append(results.followers_count)
             no_ofLikes.append(results.favourites_count)
@@ -255,16 +272,16 @@ def score_compare(users):
 
     fig0 = go.Figure(data=[go.Pie(labels=df_tweets['screenname'], values=df_tweets['no_of_likes'], hole=.3)])
 
-    fig0.write_html('templates/main/likes.html')
+    fig0.write_html('./main/templates/main/likes.html')
 
 
     # Popularity Score and Reach score
 
     fig1=df_tweets.plot.bar(y='screenname', x="popularity_score")
-    fig1.write_html("templates/main/pop.html")
+    fig1.write_html("./main/templates/main/pop.html")
 
     fig2 = df_tweets.plot.bar(y='screenname', x="reach_score")
-    fig2.write_html("templates/main/reach.html")
+    fig2.write_html("./main/templates/main/reach.html")
 
     # Normalisation and Influencer score calculation
 
@@ -281,5 +298,5 @@ def score_compare(users):
 
 
     fig3 = df_tweets.plot.bar(y='screenname', x="inf")
-    fig3.write_html("templates/main/inf.html")
+    fig3.write_html("./main/templates/main/inf.html")
             
