@@ -76,7 +76,8 @@ def compete(request):
         inf = render_to_string('main/inf.html')
         reach = render_to_string('main/reach.html')
         pop = render_to_string('main/pop.html')
-        return render(request, "main/user_comp.html", {'pop': pop, 'reach': reach, 'inf':inf} )
+        likes = render_to_string('main/likes.html')
+        return render(request, "main/user_comp.html", {'pop': pop, 'reach': reach, 'inf':inf, 'likes':likes} )
     return render(request, "main/user_input.html")
     
 

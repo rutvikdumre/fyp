@@ -10741,12 +10741,12 @@ a.text-darker:hover, a.text-darker:focus {
   transition: all 0.15s ease;
   letter-spacing: 0.025em;
   font-size: 0.875rem;
-  will-change: transform; }
+  will-change: transform;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem; }
   .btn:hover {
     box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
     transform: translateY(-1px); }
-  .btn:not(:last-child) {
-    margin-right: .5rem; }
   .btn i:not(:first-child),
   .btn svg:not(:first-child) {
     margin-left: .5rem; }
