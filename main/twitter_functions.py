@@ -111,10 +111,10 @@ def getinfo(name):
 
     # assign the values accordingly
 
-    consumer_key = "Tm30Tmmk1eaEzbi23Nm3NU1g5"
-    consumer_secret = "jId4w7i1QLJGqv3JnlM33N9ZzZEhP1QmYu6RzaBYarrNM5HAzG"
-    access_token = "1390534356796514304-5KUsYqQaXJXxKwauEupXT7UtkYLAmY"
-    access_token_secret = "U4nDzR99UsH8aCuKB9ntLGbZLCwwoDkLLjt0A3FvwngT1"
+    consumer_key = 'as6IxOQ0arO7AznKoPUfLQt5l'
+    consumer_secret = 'a9CHQVAvui2BuxXVKAqBHOBDOiGex1iFAb8vaHtKDT91ni4nBz'
+    access_token =  '1390534356796514304-AX2lcuHToECxxzl5HtBqU4SPZD05lc'
+    access_token_secret = 'MbXWOuYOjljxe90NgOJGiYSu46fX7AQ020RtwpaKOwQyG'
     
     # authorization of consumer key and consumer secret
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
@@ -224,39 +224,28 @@ def score_compare(users):
     no_ofFollowing = []
     no_ofTweetsCount = []
     no_ofFollowers = []
-
-    consumer_key = "Tm30Tmmk1eaEzbi23Nm3NU1g5"
-    consumer_secret = "jId4w7i1QLJGqv3JnlM33N9ZzZEhP1QmYu6RzaBYarrNM5HAzG"
-    access_token = "1390534356796514304-5KUsYqQaXJXxKwauEupXT7UtkYLAmY"
-    access_token_secret = "U4nDzR99UsH8aCuKB9ntLGbZLCwwoDkLLjt0A3FvwngT1"
-    
-    # authorization of consumer key and consumer secret
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    
-    # set access to user's access key and access secret 
-    auth.set_access_token(access_token, access_token_secret)
     
     api = tweepy.API(auth)
     error=[]
     for name in users:
         try:
-            print('user: {}'.format(name.strip()))
-            results = api.get_user(screen_name=name.strip())
-            
+            results = api.get_user(id=name)
             screenname.append(results.screen_name)
             no_ofFollowers.append(results.followers_count)
             no_ofLikes.append(results.favourites_count)
             no_ofFollowing.append(results.friends_count)
             no_ofTweetsCount.append(results.statuses_count) 
-        except Exception as e:
-            error+=['Problem with the username:"{}"'.format(name)]
-            print(e)
+        except:
+            error+=['Problem with the username:{}'.format('name')]
+            print(error)
 
         dict_tweets = {'screenname': screenname, 'no_of_likes':no_ofLikes, 'no_of_followers':no_ofFollowers, 'no_of_following':no_ofFollowing, 'tweet_count':no_ofTweetsCount}
         df_tweets = pd.DataFrame(dict_tweets)
         df_tweets['reach_score']=df_tweets['no_of_followers']-df_tweets['no_of_following']
         df_tweets['popularity_score']=df_tweets['no_of_likes']+df_tweets['tweet_count']
-        
+
+
+    print(df_tweets.head)
     pd.options.plotting.backend = "plotly"
 
 
@@ -265,7 +254,9 @@ def score_compare(users):
 
 
     fig0 = go.Figure(data=[go.Pie(labels=df_tweets['screenname'], values=df_tweets['no_of_likes'], hole=.3)])
-    fig0.write_html('likes.html')
+
+    fig0.write_html('templates/main/likes.html')
+
 
     # Popularity Score and Reach score
 

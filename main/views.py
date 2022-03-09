@@ -20,7 +20,6 @@ def landing(request): # Landing Page View
             return redirect('topic/'+uid)
         
         br = render_to_string('main/file.html')
-        print(br)
         return render(request,'main/index.html',{'br':br})
     else:
         return redirect('main:login-view')
