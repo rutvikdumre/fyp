@@ -15,6 +15,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
+
 # function to print sentiments
 # of the sentence.
 def sentiment_scores(sentence):
@@ -260,17 +261,19 @@ def score_compare(users):
 
 
     # Likes
+    
+
 
     fig0 = go.Figure(data=[go.Pie(labels=df_tweets['screenname'], values=df_tweets['no_of_likes'], hole=.3)])
-    fig0.write_html('template/main/likes.html')
+    fig0.write_html('likes.html')
 
     # Popularity Score and Reach score
 
     fig1=df_tweets.plot.bar(y='screenname', x="popularity_score")
-    fig1.write_html("template/main/pop.html")
+    fig1.write_html("templates/main/pop.html")
 
     fig2 = df_tweets.plot.bar(y='screenname', x="reach_score")
-    fig2.write_html("template/main/reach.html")
+    fig2.write_html("templates/main/reach.html")
 
     # Normalisation and Influencer score calculation
 
@@ -287,5 +290,5 @@ def score_compare(users):
 
 
     fig3 = df_tweets.plot.bar(y='screenname', x="inf")
-    fig3.write_html("template/main/inf.html")
+    fig3.write_html("templates/main/inf.html")
             
