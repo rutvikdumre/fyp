@@ -1,86 +1,149 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Dashboard {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>BootstrapDash Comingsoon Template</title>
-        <link href="https://fonts.googleapis.com/css?family=Karla:400,700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.8.95/css/materialdesignicons.min.css">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-        <link rel="stylesheet" href="{% static 'css/bd-coming-soon.css' %}">
-    </head>
-<body>
-    <header>
-        <div class="container">
-            <nav class="navbar navbar-dark bg-transparenet">
-                <a class="navbar-brand" href="{% url 'main:landing-page' %}">
-                    <img src="{% static 'images/logo.png' %}" alt="logo">
-                </a>
-                <span class="navbar-text ml-auto d-none d-sm-inline-block">026-027-031 </span>
-                <span class="navbar-text d-none d-sm-inline-block">project.bravo2@gmail.com</span>
-            </nav>
+
+<div class="header bg-primary pb-6">
+  <div class="container-fluid">
+    <div class="header-body">
+      <div class="row align-items-center py-4">
+        <div class="col-lg-6 col-7">
+          <h6 class="h2 text-white d-inline-block mb-0">Tables</h6>
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+            <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+              <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+              <li class="breadcrumb-item"><a href="#">Tables</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Tables</li>
+            </ol>
+          </nav>
         </div>
-    </header>
-    <main class="my-auto">
-        <div class="container">
-            <h1 style="color: white;" class="mb-5">Search results from Twitter</h1>
-            <h2>Sentiment count:</h2>
-            <div class="table-responsive custom-table-responsive">
-              {% if pos is 0 and neg is 0 and neu is 0 %}
-              <h2 style="color: red;">No results found. Try reducing search parameters</h2>
-              {% endif %}
-              
-              <table class="table custom-table">
-                <thead>
-                  <th>Positive tweets</th>
-                  <th>Negative tweets</th>
-                  <th>Neutral tweets</th>
-                </thead>
-                <tbody>
-                <td>{{ pos }}</td>
-                <td>{{ neg }}</td>
-                <td>{{ neu }}</td>  
-                </tbody>
-              </table>
-              <div style="display:flex;justify-content: center;">
-                  {% if graph %}
-                    <img src='data:image/png;base64,{{ graph }}'>
+        <div class="col-lg-6 col-5 text-right">
+          <a href="#" class="btn btn-sm btn-neutral">New</a>
+          <a href="#" class="btn btn-sm btn-neutral">Filters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      <div class="container-fluid mt--6">
+        <div class="row">
+          <div class="col">
+            <div class="card bg-default shadow">
+              <div class="card-header bg-transparent border-0">
+                <h3 class="text-white mb-0">Search Results from Twitter for Topic: topic</h3>
+              </div>
+              <div class="table-responsive">
+                {% if pos is 0 and neg is 0 and neu is 0 %}
+                <h2 style="color: red;">No results found. Try reducing search parameters</h2>
+                {% endif %}
+                <table class="table align-items-center table-dark table-flush">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col" class="sort" data-sort="name">Positive</th>
+                      <th scope="col" class="sort" data-sort="budget">Negative</th>
+                      <th scope="col" class="sort" data-sort="status">Neutral</th>
+                    </tr>
+                  </thead>
+                  <tbody class="list">
+                    <tr>
+                      <td class="budget">
+                        {{pos}}
+                      </td>
+                      <td class="budget">
+                        {{neg}}
+                      </td>
+                      <td class="budget">
+                        {{neu}}
+                      </td>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    
+      
+        
+
+        <!-- Sentiment and Wordlcoud graphs -->
+
+        <div class="row">
+          <div class="col-xl-6">
+            <div class="card">
+              <div class="card-header bg-transparent">
+                  <div class="row align-items-center">
+                      <div class="col">
+                        <h5 class="h3 mb-0">Sentiment Count</h5>
+                      </div>
+                    </div>
+                    {% if graph %}
+                    <img src='data:image/png;base64,{{ graph }}' width="100%">
                   {% endif %}
               </div>
-              <br>
-              <h2>WordCloud for the Tweets:</h2>
-              <div style="display:flex;justify-content: center;">
-                {% if graph %}
-                  <img src='data:image/png;base64,{{ wordcloud }}'>
-                {% endif %}
+            </div>
+          </div>
+  
+          <div class="col-xl-6">
+              <div class="card">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                          <h5 class="h3 mb-0">Wordcloud</h5>
+                        </div>
+                      </div>
+                      {% if graph %}
+                      <img src='data:image/png;base64,{{ wordcloud }}' width="100%">
+                    {% endif %}
+                </div>
               </div>
-              
-              <h2>All information:</h2>
-              <div class="dropdown">
-                <form method="POST">
-                  {% csrf_token %}
-                <label style="color: white;margin-right: 2%;" for="Sentiment">Choose a Sentiment:</label>
-                <select style="margin: 3%; border-radius: 12%;" name="Sentiment" id="Sentiment">
-                  <option value="All">All</option>
-                  <option value="Positive">Positive</option>
-                  <option value="Negative">Negative</option>
-                  <option value="Neutral">Neutral</option>
-                </select>
-                <input style="margin: 3%; border-radius: 12%;" type="submit">
-              </form>
+          </div>
+        </div>
+  
+
+        <!-- Tweet Table -->
+
+        <div class="dropdown">
+          <form method="POST">
+            {% csrf_token %}
+          <label style="color: white;margin-right: 2%;" for="Sentiment">Choose a Sentiment:</label>
+          <select style="margin: 3%; border-radius: 12%;" name="Sentiment" id="Sentiment">
+            <option value="All">All</option>
+            <option value="Positive">Positive</option>
+            <option value="Negative">Negative</option>
+            <option value="Neutral">Neutral</option>
+          </select>
+          <input style="margin: 3%; border-radius: 12%;" type="submit">
+        </form>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <div class="card">
+              <!-- Card header -->
+              <div class="card-header border-0">
+                <h3 class="mb-0">topic</h3>
               </div>
-              
-              <table class="table custom-table">
-                <thead>
-                  <tr>  
-                    {% for header in headings %}
-                    <th scope="col">{{ header }}</th>
-                    {% endfor %}
-                  </tr>
-                </thead>
-                <tbody>
+              <!-- Light table -->
+              <div class="table-responsive">
+                <table class="table align-items-center table-flush">
+                  <thead class="thead-light">
+                    <tr>
+                      {% for header in headings %}
+                      <th scope="col" class="sort">{{header}}</th>
+                      {% endfor %}
+                    </tr>
+                  </thead>
+
+                  <tbody>
                     {% for row in data %}
                     <tr> 
                       {% for item in row %}
@@ -93,11 +156,47 @@
                     </tr>
                     {% endfor %}
                 </tbody>
-              </table>
+
+                  <tbody class="list">
+                    {% for row in data %}
+                    <tr>
+                      {% for item in row %}
+                      {% if forloop.first %}
+                      <td class="budget"><a target="_blank" href="/user/{{ item }}">{{ item }}</a></td>
+                      {% else %}
+                      <td>{{ item }}</td>
+                      {% endif %}
+                      {% endfor %}
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+              </div>
+              <!-- Card footer -->
+              
             </div>
-      
-      
           </div>
-    </main>
+        </div>
+
+               
+      </div>
+              
+              
+           
+      
+      
+         
+
+
+          
+
+          {% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+  <script src="/static/assets/vendor/chart.js/dist/Chart.min.js"></script>
+  <script src="/static/assets/vendor/chart.js/dist/Chart.extension.js"></script>
+
+{% endblock javascripts %}
 </body>
 </html>
