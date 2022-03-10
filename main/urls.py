@@ -12,6 +12,5 @@ urlpatterns = [
     path('user/<str:username>',views.analytics_by_account,name='analytics-by-account'),
     path('topic/',views.analytics_by_topic,name='analytics-by-topic'),
     path('compare/',views.compete,name='user-comp'),
-    path('register/',views.register,name='register-view'),
-    path('sentiment/',views.sentiment,name='sentiment-view')
+    path('register/',views.register,name='register-view')
 ]
