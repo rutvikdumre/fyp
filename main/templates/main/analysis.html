@@ -38,7 +38,7 @@
           <div class="col">
             <div class="card bg-default shadow">
               <div class="card-header bg-transparent border-0">
-                <h3 class="text-white mb-0">Search Results from Twitter for Topic: topic</h3>
+                <h3 class="text-white mb-0">Search Results from Twitter for Topic: {{topic}}</h3>
               </div>
               <div class="table-responsive">
                 {% if pos is 0 and neg is 0 and neu is 0 %}
@@ -92,8 +92,8 @@
             </div>
           </div>
   
-          <div class="col-xl-6">
-              <div class="card">
+          <div class="col-xl-6" >
+              <div class="card" style="margin-top: 10%;">
                 <div class="card-header bg-transparent">
                     <div class="row align-items-center">
                         <div class="col">
@@ -130,16 +130,20 @@
             <div class="card">
               <!-- Card header -->
               <div class="card-header border-0">
-                <h3 class="mb-0">topic</h3>
+                <h3 class="mb-0">{{topic}}</h3>
               </div>
               <!-- Light table -->
-              <div class="table-responsive">
+              <div class="table" style="width: 100%;">
                 <table class="table align-items-center table-flush">
                   <thead class="thead-light">
                     <tr>
-                      {% for header in headings %}
-                      <th scope="col" class="sort">{{header}}</th>
-                      {% endfor %}
+                      <th scope="col" width="10%">Screenname</th>
+                      <th scope="col" width="10%">Time</th>
+                      <th scope="col" width="10%">Tweet</th>
+                      <th scope="col" width="10%">Users</th>
+                      <th scope="col" width="10%">Hastags</th>
+                      <th scope="col" width="10%">Location</th>
+                      <th scope="col" width="10%">Sentiment</th>
                     </tr>
                   </thead>
 
@@ -148,28 +152,16 @@
                     <tr> 
                       {% for item in row %}
                       {% if forloop.first %}
-                      <td><a target="_blank" href="/user/{{ item }}">{{ item }}</a></td>
+                      <td style="width:10%; white-space: normal;"><a target="_blank" href="/user/{{ item }}">{{ item }}</a></td>
                       {% else %}
-                      <td>{{ item }}</td>
+                      <td style="width: 10%; white-space: normal;">{{ item }}</td>
                       {% endif %}
                       {% endfor %}
                     </tr>
                     {% endfor %}
                 </tbody>
 
-                  <tbody class="list">
-                    {% for row in data %}
-                    <tr>
-                      {% for item in row %}
-                      {% if forloop.first %}
-                      <td class="budget"><a target="_blank" href="/user/{{ item }}">{{ item }}</a></td>
-                      {% else %}
-                      <td>{{ item }}</td>
-                      {% endif %}
-                      {% endfor %}
-                    </tr>
-                    {% endfor %}
-                  </tbody>
+                  
               </div>
               <!-- Card footer -->
               

@@ -1486,7 +1486,7 @@ pre {
   .table-responsive-lg {
     display: block;
     width: 100%;
-    overflow-x: auto;
+    overflow-x: hidden;
     -webkit-overflow-scrolling: touch; }
     .table-responsive-lg > .table-bordered {
       border: 0; } }
@@ -13876,7 +13876,7 @@ textarea[resize="horizontal"] {
 .table td,
 .table th {
   font-size: 0.8125rem;
-  white-space: nowrap; }
+   }
 
 .table.align-items-center td,
 .table.align-items-center th {
