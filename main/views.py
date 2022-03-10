@@ -42,32 +42,34 @@ def analytics_by_account(request,username):
     modes = {'likesperpost':{'name':'Likes per post'},'viewsvslikes':{'name':'Views vs Likes'},'compfollowers':{'name':'Followers comparison'}}
     return render(request,'main/options.html',{'profile':profile,'username':username,'modes':modes})
 
-def analytics_by_topic(request,topic):
-    twitter_functions.twitter_credentials()
-    df,positive,negative,neutral = twitter_functions.twitter_query(topic)
-    df=df.iloc[:,:]
-    fig = twitter_functions.sentplot(df)
+def analytics_by_topic(request):
+    if request.method=="POST":
+        topic=request.POST.get('topic')
+        twitter_functions.twitter_credentials()
+        df,positive,negative,neutral = twitter_functions.twitter_query(topic)
+        df=df.iloc[:,:]
+        fig = twitter_functions.sentplot(df)
 
-    rows=list(df.itertuples(index=False))
+        rows=list(df.itertuples(index=False))
 
-    buf = io.BytesIO()
-    fig.savefig(buf,format='png')
-    buf.seek(0)
-    string = base64.b64encode(buf.read())
-    uri =  urllib.parse.quote(string)
-    #wordcloud
-    fig = twitter_functions.wordcloud(twitter_functions.tweetClean(df))
+        buf = io.BytesIO()
+        fig.savefig(buf,format='png')
+        buf.seek(0)
+        string = base64.b64encode(buf.read())
+        uri =  urllib.parse.quote(string)
+        #wordcloud
+        fig = twitter_functions.wordcloud(twitter_functions.tweetClean(df))
 
-    rows=list(df.itertuples(index=False))
+        rows=list(df.itertuples(index=False))
 
-    buf1 = io.BytesIO()
-    fig.savefig(buf1,format='png')
-    buf1.seek(0)
-    string1 = base64.b64encode(buf1.read())
-    uri1 =  urllib.parse.quote(string1)
+        buf1 = io.BytesIO()
+        fig.savefig(buf1,format='png')
+        buf1.seek(0)
+        string1 = base64.b64encode(buf1.read())
+        uri1 =  urllib.parse.quote(string1)
 
-    return render(request,'main/analysis.html',{'graph':uri,'wordcloud': uri1,'data':rows,'topic':topic,'pos':positive,'neg':negative,'neu':neutral})
-
+        return render(request,'main/analysis.html',{'graph':uri,'wordcloud': uri1,'data':rows,'topic':topic,'pos':positive,'neg':negative,'neu':neutral})
+    return render(request, "main/sentiment.html")
 
 def compete(request):
     if request.method=='POST':
@@ -79,6 +81,7 @@ def compete(request):
         likes = render_to_string('main/likes.html')
         return render(request, "main/user_comp.html", {'pop': pop, 'reach': reach, 'inf':inf, 'likes':likes} )
     return render(request, "main/user_input.html")
+    
     
 
 # likesPerPost
