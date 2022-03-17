@@ -11,6 +11,7 @@ urlpatterns = [
     path('logout/',auth_views.LogoutView.as_view(template_name='main/logout.html'),name='logout-view'),
     path('user/<str:username>',views.analytics_by_account,name='analytics-by-account'),
     path('topic/',views.analytics_by_topic,name='analytics-by-topic'),
+    path('hashtag/',views.gethastag ,name='get-hashtags'),
     path('compare/',views.compete,name='user-comp'),
     path('register/',views.register,name='register-view')
 ]

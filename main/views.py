@@ -8,6 +8,7 @@ from . import twitter_functions
 from .models import *
 from .forms import RegisterForm
 from django.template.loader import render_to_string, get_template
+from . import hashtag 
 
 
 # Create your views here.
@@ -81,8 +82,15 @@ def compete(request):
         likes = render_to_string('main/likes.html')
         return render(request, "main/user_comp.html", {'pop': pop, 'reach': reach, 'inf':inf, 'likes':likes} )
     return render(request, "main/user_input.html")
-    
-    
+
+def gethastag(request):
+    if request.method=='POST':
+        content=request.POST.get('content')
+        hashtags= hashtag.gethash(content)
+        print(hashtags)
+        return render(request, "main/showhash.html", {'hashtags': " ".join(hashtags), 'content':content} )
+    return render(request, "main/gethashtags.html")
+
 
 # likesPerPost
 # viewsvslikes
