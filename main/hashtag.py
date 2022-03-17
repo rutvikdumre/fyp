@@ -39,6 +39,7 @@ for i in topic_World:
 
 def gethash(tweet_input):
     nltk.download('averaged_perceptron_tagger')
+    nltk.download('punkt')
     appropriate_hashtag_list = tweet_similarity_model(tweet_input)
 
     if tweet_input != "":
