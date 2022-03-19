@@ -399,12 +399,16 @@ def fuzzy():
     no_ofFollowing = []
     no_ofTweetsCount = []
     no_ofFollowers = []
+
+    #print("total users: ", len(user_twitter_handle))
     
     for x in range(0, len(user_twitter_handle)):
         name = user_twitter_handle[x]
+        #print(name)
         try:
-            print('Calling the user_timeline function with our parameters')
-            results = api.get_user(user_id=name)
+            #print('Calling the user_timeline function with our parameters')
+            results = api.get_user(screen_name=name)
+            #print(results)
             screenname.append(results.screen_name)
             no_ofFollowers.append(results.followers_count)
             no_ofLikes.append(results.favourites_count)
@@ -414,7 +418,11 @@ def fuzzy():
             continue
         
     dict_tweets = {'screenname': screenname, 'no_of_likes':no_ofLikes, 'no_of_followers':no_ofFollowers, 'no_of_following':no_ofFollowing, 'tweet_count':no_ofTweetsCount}
-
+    """print('--------------------------------------------------------')
+    print()
+    print(dict_tweets)
+    print()
+    print('--------------------------------------------------------')"""
     df_tweets = pd.DataFrame(dict_tweets)
     
     df_tweets['reach_score']=df_tweets['no_of_followers']-df_tweets['no_of_following']
@@ -422,6 +430,7 @@ def fuzzy():
     
     final = pd.merge(pagerank, df_tweets, how='outer', on=['screenname'])
     final = final.dropna()
+    print(final.head(5))
     scaler = MinMaxScaler(feature_range=(0,1))
     final[["reach_score", "popularity_score", "pagerank"]] = scaler.fit_transform(final[["reach_score", "popularity_score", "score"]])
 
@@ -478,6 +487,7 @@ def inf_calc(pop,reach,page):
     inf=influence.output['x_inf']
 
     return inf
-'''proposed_getdata('russia')
-fuzzy()'''
+
+proposed_getdata('russia')
+fuzzy()
 
