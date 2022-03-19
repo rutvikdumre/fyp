@@ -15,25 +15,7 @@ import itertools
 
 
 api = get_api()
-"""trends_US = api.trends_place(23424977)
-trends_world = api.trends_place(1)
-topic_US = []
-topic_World = []
 
-for i in trends_US:
-    for trend in i['trends']:
-        topic_US.append(trend['name'])
-for i in topic_US:
-    if i.startswith('#'):
-        st.sidebar.write(i)
-
-st.sidebar.header("Trending Twitter hashtags (World)")
-for i in trends_world:
-    for trend in i['trends']:
-        topic_World.append(trend['name'])
-for i in topic_World:
-    if i.startswith('#'):
-        st.sidebar.write(i)"""
 
 #print('Write a tweet:')
 

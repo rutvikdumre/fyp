@@ -17,6 +17,12 @@ import numpy as np
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 import re
+from pandas import DataFrame
+from sklearn.preprocessing import MinMaxScaler
+import numpy as np
+import skfuzzy as fuzz
+import matplotlib.pyplot as plt
+import os
 
 
 
@@ -297,5 +303,181 @@ def score_compare(users):
     fig3.write_html("./main/templates/main/inf.html")
     
 
+
+
+def proposed_getdata(query):
+    os.remove("topic.json")
+    with open("twitter_credentials.json", "r") as file:
+        creds = json.load(file)
+    python_tweets = Twython(creds['CONSUMER_KEY'], creds['CONSUMER_SECRET'])
+    # Create our query
+    query = {'q': query,
+            'result_type': 'mixed',
+            'count': 100,
+            'lang': 'en',
+            #'geocode':'21.145800,79.088158,100000km' 
+            }
     
+    data_json = []
+
+    for status in python_tweets.search(**query)['statuses']:
+        dict_ = {"text": "", "created_at": "", "entities":{}, "user": {}, "retweet_count": "None",  "id":""}
+        #dict_ = dict.fromkeys(['user', 'created_at', 'text', 'retweet_count', 'entities', 'location'])
+        dict_user = {
+            "lang" :status['user']['lang'],
+            "created_at" :status['user']['created_at'],
+            "statuses_count" :status['user']['statuses_count'],
+            "description" :status['user']['description'],
+            "friends_count" :status['user']['friends_count'],
+            "url": status['user']['url'],
+            "profile_image_url_https": status['user']['profile_image_url_https'],
+            "followers_count": status['user']['followers_count'],
+            "screen_name" :status['user']['screen_name'],
+            "location": status['user']['location'],
+            "favourites_count": status['user']['favourites_count'],
+            "verified": str(status['user']['verified']),
+            "id":status['user']['id'], 
+            "name": status['user']['name'] 
+            }
+        dict_entities = {
+        "user_mentions": status['entities']['user_mentions'],
+        "hashtags": status['entities']['hashtags'],
+        "urls": status['entities']['urls']
+        }
+        dict_['user'].update(dict_user)
+        dict_['entities'].update(dict_entities)
+        dict_['created_at'] = status['created_at']
+        dict_['text'] = status['text']
+        dict_['retweet_count'] = status['retweet_count']
+        dict_['id'] = status['id']
+        
+        #print(dict_)
+        
+    
+        with open("topic.json", "a") as outfile:
+            json_obj = json.dumps(dict_)
+            outfile.write(json_obj)
+            outfile.write("\n")
             
+    tweets_file = open('topic.json')
+    
+    
+def fuzzy():
+    tweets_file = open('topic.json')
+    tweet_obj = []
+    for line in tweets_file:
+        tweet_obj.append(json.loads(line))
+    pagerank= pd.read_csv('GFG.csv')
+    pagerank.rename(columns = {'name':'screenname'}, inplace = True)
+    user_twitter_handle=[]
+    for i in tweet_obj:
+        user_twitter_handle.append('@'+str(i['user']['screen_name']))
+    for i in pagerank['screenname']:
+        user_twitter_handle.append('@'+str(i))
+    user_twitter_handle=list(set(user_twitter_handle))
+        
+    list_tweets = []
+    
+    for x in range(0, len(user_twitter_handle)):
+        # The Twitter user who we want to get tweets from
+        name = user_twitter_handle[x]
+        try:
+        # Calling the user_timeline function with our parameters
+            results = api.user_timeline(user_id=name, count=10)
+        # foreach through all tweets pulled
+            for tweet in results:
+        # printing the text stored inside the tweet object
+                list_tweets.append(tweet.text)
+        except:
+            continue
+
+    df_tweets = DataFrame(list_tweets, columns=['Tweets'])
+    df_tweets.to_csv(r'tweets.csv', index=False)
+    
+    screenname = []
+    no_ofLikes = []
+    no_ofFollowing = []
+    no_ofTweetsCount = []
+    no_ofFollowers = []
+    
+    for x in range(0, len(user_twitter_handle)):
+        name = user_twitter_handle[x]
+        try:
+            print('Calling the user_timeline function with our parameters')
+            results = api.get_user(user_id=name)
+            screenname.append(results.screen_name)
+            no_ofFollowers.append(results.followers_count)
+            no_ofLikes.append(results.favourites_count)
+            no_ofFollowing.append(results.friends_count)
+            no_ofTweetsCount.append(results.statuses_count)
+        except:
+            continue
+        
+    dict_tweets = {'screenname': screenname, 'no_of_likes':no_ofLikes, 'no_of_followers':no_ofFollowers, 'no_of_following':no_ofFollowing, 'tweet_count':no_ofTweetsCount}
+
+    df_tweets = pd.DataFrame(dict_tweets)
+    
+    df_tweets['reach_score']=df_tweets['no_of_followers']-df_tweets['no_of_following']
+    df_tweets['popularity_score']=df_tweets['no_of_likes']+df_tweets['tweet_count']
+    
+    final = pd.merge(pagerank, df_tweets, how='outer', on=['screenname'])
+    final = final.dropna()
+    scaler = MinMaxScaler(feature_range=(0,1))
+    final[["reach_score", "popularity_score", "pagerank"]] = scaler.fit_transform(final[["reach_score", "popularity_score", "score"]])
+
+    final = final.drop("score", axis=1)
+    
+    #final.to_csv('combined.csv')
+    fna=final.dropna()
+    
+    inf=[]
+    for index, i in fna.iterrows():
+        inf+=[inf_calc(i['popularity_score'],i['reach_score'],i['pagerank'])]
+    fna['inf']=inf
+    fna.to_csv('combined_inf.csv')
+    
+    
+def inf_calc(pop,reach,page):
+    x_pop = ctrl.Antecedent(np.arange(0, 1.1, 0.1), 'x_pop')      #final['popularity_score'].to_numpy()
+    x_reach = ctrl.Antecedent(np.arange(0, 1.1, 0.1), 'x_reach')    #final['reach_score'].to_numpy()
+    x_page= ctrl.Antecedent(np.arange(0, 1.1, 0.1), 'x_page')      #final['score'].to_numpy()
+
+    x_inf  = ctrl.Consequent(np.arange(0, 1.1, 0.1), 'x_inf')
+    
+    x_pop['low'] = fuzz.trimf(x_pop.universe, [0, 0, 0.5])
+    x_pop['med'] = fuzz.trimf(x_pop.universe, [0, 0.5, 1])
+    x_pop['high'] = fuzz.trimf(x_pop.universe, [0.5, 1, 1])
+
+    x_reach['low'] = fuzz.trimf(x_reach.universe, [0, 0, 0.5])
+    x_reach['med'] = fuzz.trimf(x_reach.universe, [0, 0.5, 1])
+    x_reach['high'] = fuzz.trimf(x_reach.universe, [0.5, 1, 1])
+
+    x_page['low'] = fuzz.trimf(x_page.universe, [0, 0, 0.5])
+    x_page['med'] = fuzz.trimf(x_page.universe, [0, 0.5, 1])
+    x_page['high'] = fuzz.trimf(x_page.universe, [0.5, 1, 1])
+    
+    x_inf['low'] = fuzz.trimf(x_inf.universe, [0, 0, 0.5])
+    x_inf['med'] = fuzz.trimf(x_inf.universe, [0, 0.5, 1])
+    x_inf['high'] = fuzz.trimf(x_inf.universe, [0.5, 1, 1])
+    rule1 = ctrl.Rule(x_pop['low'] & x_reach['low'], x_inf['low'])
+    rule2 = ctrl.Rule((x_pop['med'] | x_reach['med'] | x_page['med']), x_inf['med'])
+    rule3 = ctrl.Rule(x_pop['high'] | x_reach['high'] | x_page['high'], x_inf['high'])
+
+    influence_ctrl = ctrl.ControlSystem([rule1, rule2, rule3])
+    influence = ctrl.ControlSystemSimulation(influence_ctrl)
+
+
+    # Pass inputs to the ControlSystem using Antecedent labels with Pythonic API
+    # Note: if you like passing many inputs all at once, use .inputs(dict_of_data)
+    influence.input['x_pop'] = pop
+    influence.input['x_reach'] = reach
+    influence.input['x_page']= page
+
+    # Crunch the numbers
+    influence.compute()
+    inf=influence.output['x_inf']
+
+    return inf
+'''proposed_getdata('russia')
+fuzzy()'''
+
