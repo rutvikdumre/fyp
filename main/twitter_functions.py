@@ -153,10 +153,13 @@ def getinfo(name):
     
     
 def sentplot(df):
-    fig, ax = plt.subplots()
+    """fig, ax = plt.subplots()
     color_dict = {'Positive':'#6ab04c', 'Negative':'#eb4d4b', 'Neutral':'#22a6b3'}
-    fig=df['sentiment'].value_counts().plot(ax=ax, kind='barh')
-    return plt
+    fig=df['sentiment'].value_counts().plot(ax=ax, kind='barh')"""
+    fig = px.pie(df, values=df['sentiment'].value_counts().values, names=df['sentiment'].value_counts().index)
+    fig.write_html('./main/templates/main/sent.html')
+    
+    #return plt
 
 def tweetClean(df):
     Tweet_Texts=df['text'].values

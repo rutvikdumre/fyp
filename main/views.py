@@ -51,15 +51,18 @@ def analytics_by_topic(request):
         twitter_functions.twitter_credentials()
         df,positive,negative,neutral = twitter_functions.twitter_query(topic)
         df=df.iloc[:,:]
-        fig = twitter_functions.sentplot(df)
+        twitter_functions.sentplot(df)
 
         rows=list(df.itertuples(index=False))
 
-        buf = io.BytesIO()
+        """buf = io.BytesIO()
         fig.savefig(buf,format='png')
         buf.seek(0)
         string = base64.b64encode(buf.read())
-        uri =  urllib.parse.quote(string)
+        uri =  urllib.parse.quote(string)"""
+
+        sent = render_to_string('main/sent.html')
+
         #wordcloud
         fig = twitter_functions.wordcloud(twitter_functions.tweetClean(df))
 
@@ -71,7 +74,7 @@ def analytics_by_topic(request):
         string1 = base64.b64encode(buf1.read())
         uri1 =  urllib.parse.quote(string1)
 
-        return render(request,'main/analysis.html',{'graph':uri,'wordcloud': uri1,'data':rows,'topic':topic,'pos':positive,'neg':negative,'neu':neutral})
+        return render(request,'main/analysis.html',{'sent':sent, 'wordcloud': uri1,'data':rows,'topic':topic,'pos':positive,'neg':negative,'neu':neutral})
     return render(request, "main/sentiment.html")
 
 def compete(request):
