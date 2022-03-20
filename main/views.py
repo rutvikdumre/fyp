@@ -87,8 +87,9 @@ def gethastag(request):
     if request.method=='POST':
         content=request.POST.get('content')
         hashtags= hashtag.gethash(content)
-        print(hashtags)
-        return render(request, "main/showhash.html", {'hashtags': " ".join(hashtags), 'content':content} )
+        #print(hashtags)
+        data= twitter_functions.get_trends_india()
+        return render(request, "main/showhash.html", {'hashtags': " ".join(hashtags), 'content':content, 'data':data} )
     return render(request, "main/gethashtags.html")
 
 

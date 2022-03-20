@@ -7,7 +7,6 @@ from PageRank.TweetInfo import asTweetInfo,asPartialTweetInfo, TweetInfo
 from PageRank.ScreenNameIndex import ScreenNameIndex,UserRank
 from PageRank.TransitionProbablity import buildInitialStateMatrixInfo,buildLinkMatrixInfo,LinkMatrix,InitialStateMatrix,TransitionMatrix,buildStartMatrix
 from PageRank.Iterator import Iterator
-from GraphicsPlot import BarGraph
 import csv
 
 
@@ -74,7 +73,8 @@ for userRank in userRankList:
     #print("Rank %d %s" % (count,userRank))
     
 print('----------------')  
-with open('GFG.csv', 'w') as f:
+
+with open('GFG.csv', 'a') as f:
       
     # using csv.writer method from CSV package
     write = csv.writer(f)

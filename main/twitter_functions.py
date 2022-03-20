@@ -370,6 +370,11 @@ def fuzzy():
     tweet_obj = []
     for line in tweets_file:
         tweet_obj.append(json.loads(line))
+    try:
+        os.remove('GFG.csv')
+    except:
+        pass
+    os.system('python pagerank.py -f, --file=topic.json')
     pagerank= pd.read_csv('GFG.csv')
     pagerank.rename(columns = {'name':'screenname'}, inplace = True)
     user_twitter_handle=[]
@@ -379,7 +384,7 @@ def fuzzy():
         user_twitter_handle.append('@'+str(i))
     user_twitter_handle=list(set(user_twitter_handle))
         
-    list_tweets = []
+    '''list_tweets = []
     
     for x in range(0, len(user_twitter_handle)):
         # The Twitter user who we want to get tweets from
@@ -395,7 +400,7 @@ def fuzzy():
             continue
 
     df_tweets = DataFrame(list_tweets, columns=['Tweets'])
-    df_tweets.to_csv(r'tweets.csv', index=False)
+    df_tweets.to_csv(r'tweets.csv', index=False)'''
     
     screenname = []
     no_ofLikes = []
@@ -445,6 +450,11 @@ def fuzzy():
     for index, i in fna.iterrows():
         inf+=[inf_calc(i['popularity_score'],i['reach_score'],i['pagerank'])]
     fna['inf']=inf
+    
+    try:
+        os.remove('combined_inf.csv')
+    except:
+        pass
     fna.to_csv('combined_inf.csv')
     
     
@@ -582,3 +592,8 @@ def sentiment_scores(sentence):
 '''proposed_getdata('russia')
 fuzzy()
 print(combine())'''
+
+def get_trends_india():
+    trends = api.trends_place(23424848)
+    trends=trends[0]['trends']
+    return trends
