@@ -282,18 +282,22 @@ def score_compare(users):
     
 
 
-    fig0 = go.Figure(data=[go.Pie(labels=df_tweets['screenname'], values=df_tweets['no_of_likes'], hole=.3)])
-
+    fig0 = px.pie(df_tweets, values = "no_of_likes", names='screenname', title = "Distribution of Likes", color_discrete_sequence=px.colors.qualitative.Vivid, template='plotly_white', hole=.3)
     fig0.write_html('./main/templates/main/likes.html')
 
+    fig1 = px.pie(df_tweets, values = "no_of_followers", names='screenname', title = "Distribution of Followers", color_discrete_sequence=px.colors.qualitative.Vivid, template='plotly_white',  hole=.3)
+    fig1.write_html('./main/templates/main/followers.html')
 
     # Popularity Score and Reach score
+    fig2= px.bar(df_tweets, y = "screenname", x = "popularity_score",
+       labels = {"screenname": "Twitter Screen name", "popularity_score": "Popularity Score"},
+       orientation = 'h',color = "popularity_score", color_continuous_scale = px.colors.cyclical.Phase, template='plotly_white')
+    fig2.write_html("./main/templates/main/pop.html")
 
-    fig1=df_tweets.plot.bar(y='screenname', x="popularity_score")
-    fig1.write_html("./main/templates/main/pop.html")
-
-    fig2 = df_tweets.plot.bar(y='screenname', x="reach_score")
-    fig2.write_html("./main/templates/main/reach.html")
+    fig3 = px.bar(df_tweets, y = "screenname", x = "reach_score",
+       labels = {"screenname": "Twitter Screen name", "reach_score": "Reach Score"},
+       orientation = 'h',color = "reach_score", color_continuous_scale =px.colors.cyclical.Phase, template='plotly_white')
+    fig3.write_html("./main/templates/main/reach.html")
 
     # Normalisation and Influencer score calculation
 
@@ -307,10 +311,10 @@ def score_compare(users):
 
     infc= df_tweets[df_tweets.inf == df_tweets.inf.max()]
 
-
-
-    fig3 = df_tweets.plot.bar(y='screenname', x="inf")
-    fig3.write_html("./main/templates/main/inf.html")
+    fig4 = px.bar(df_tweets, y = "screenname", x = "inf",
+       labels = {"screenname": "Twitter Screen name", "inf": "Influence Score"},
+       orientation = 'h',color = "inf", color_continuous_scale = px.colors.cyclical.Phase, template='plotly_white')
+    fig4.write_html("./main/templates/main/inf.html")
     
     return tweet,fol,like,infc
 
@@ -700,9 +704,9 @@ def generate_sentiment_summary(df):
     print('\nNegative: ')
     print(neg_summary)
 
-topic = 'ios15'
+"""topic = 'ios15'
 num_of_tweets = 100
 summary_size = int(pow(num_of_tweets,0.5))
 df,positive,negative,neutral = twitter_query(topic)
-generate_sentiment_summary(df)
+generate_sentiment_summary(df)"""
 

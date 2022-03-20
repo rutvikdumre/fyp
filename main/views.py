@@ -85,7 +85,8 @@ def compete(request):
         reach = render_to_string('main/reach.html')
         pop = render_to_string('main/pop.html')
         likes = render_to_string('main/likes.html')
-        return render(request, "main/user_comp.html", {'uid':uid, 'pop': pop, 'reach': reach, 'inf':inf, 'likes':likes, 
+        followers = render_to_string('main/followers.html')
+        return render(request, "main/user_comp.html", {'uid':uid, 'pop': pop, 'reach': reach, 'inf':inf, 'likes':likes, 'followers':followers,
                                                        'tname':tweet['screenname'].to_string()[1:], 'tcount':tweet['tweet_count'].to_string()[1:], 
                                                        'fname':fol['screenname'].to_string()[1:], 'fcount':fol['no_of_followers'].to_string()[1:], 
                                                        'lname':like['screenname'].to_string()[1:], 'lcount':like['no_of_likes'].to_string()[1:], 
