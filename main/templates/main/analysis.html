@@ -85,9 +85,7 @@
                         <h5 class="h3 mb-0">Sentiment Count</h5>
                       </div>
                     </div>
-                    {% if graph %}
-                    <img src='data:image/png;base64,{{ graph }}' width="100%">
-                  {% endif %}
+                    {{sent}}
               </div>
             </div>
           </div>
@@ -100,7 +98,8 @@
                           <h5 class="h3 mb-0">Wordcloud</h5>
                         </div>
                       </div>
-                      {% if graph %}
+                      {% if wordcloud %}
+                      
                       <img src='data:image/png;base64,{{ wordcloud }}' width="100%">
                     {% endif %}
                 </div>
