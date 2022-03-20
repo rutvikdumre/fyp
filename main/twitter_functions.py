@@ -576,6 +576,6 @@ def sentiment_scores(sentence):
     sentiment_dict = sid_obj.polarity_scores(sentence)
     return sentiment_dict['compound']
 
-proposed_getdata('russia')
+'''proposed_getdata('russia')
 fuzzy()
-print(combine())
+print(combine())'''
