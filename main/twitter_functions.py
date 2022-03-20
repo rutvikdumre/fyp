@@ -264,7 +264,7 @@ def score_compare(users):
         df_tweets['popularity_score']=df_tweets['no_of_likes']+df_tweets['tweet_count']
 
 
-    print(df_tweets.head)
+
     pd.options.plotting.backend = "plotly"
 
 
@@ -296,7 +296,7 @@ def score_compare(users):
     df_tweets['inf']=inf
 
 
-    print(df_tweets.head)
+
 
 
     fig3 = df_tweets.plot.bar(y='screenname', x="inf")
@@ -430,7 +430,6 @@ def fuzzy():
     
     final = pd.merge(pagerank, df_tweets, how='outer', on=['screenname'])
     final = final.dropna()
-    print(final.head(5))
     scaler = MinMaxScaler(feature_range=(0,1))
     final[["reach_score", "popularity_score", "pagerank"]] = scaler.fit_transform(final[["reach_score", "popularity_score", "score"]])
 
@@ -488,6 +487,95 @@ def inf_calc(pop,reach,page):
 
     return inf
 
+def combine():
+    df= pd.read_csv('combined_inf.csv')
+    df = df[['screenname','inf']]
+    tweets= pd.read_json('topic.json', lines=True) #remove empty line at the end of JSON if error occurs
+
+
+    temp={'screenname':[],'text':[]}
+    for j,i in tweets.iterrows():
+        temp['screenname']+=[i['user']['screen_name']]
+        temp['text']+= [i['text']]
+    df1 = pd.DataFrame(temp)
+    
+    result = df.merge(df1, on='screenname', how='inner')
+    
+    sent=[]
+    for j,i in result.iterrows():
+        sent+=[sentiment_scores(i['text'])]
+    result['sentiment'] = sent
+    
+    overall={ 'pos':0,
+          'neg':0,
+          'neu':0}
+    for i in result['sentiment']:
+        if i>= 0.05 :
+            overall['pos']+=1
+    
+        elif i <= - 0.05 :
+            overall['neg']+=1
+    
+        else :
+            overall['neu']+=1
+        
+    total_inf=sum(result['inf'])
+    
+    infl=[]
+    for j,i in result.iterrows():
+        infl+=[(i['inf']/total_inf)*100]
+        
+    result['Inf_percent']=infl
+    
+    
+    poverall={ 'pos':0,
+          'neg':0,
+          'neu':0}
+    for j,i in result.iterrows():
+        if i['sentiment']>= 0.05 :
+            poverall['pos']+=i['Inf_percent']
+    
+        elif i['sentiment'] <= - 0.05 :
+            poverall['neg']+=i['Inf_percent']
+    
+        else :
+            poverall['neu']+=i['Inf_percent']
+            
+    pos =[]
+    neg = []
+    neu = []
+    for j,i in result.iterrows():
+        sent=proposed_sent(i['text'])
+        pos+=[sent['pos']]
+        neg+=[sent['neg']]
+        neu+=[sent['neu']]
+    result['pos'] = pos
+    result['neg'] = neg
+    result['neu'] = neu
+    return result
+    
+def proposed_sent(sentence):
+ 
+    # Create a SentimentIntensityAnalyzer object.
+    sid_obj = SentimentIntensityAnalyzer()
+ 
+    # polarity_scores method of SentimentIntensityAnalyzer
+    # object gives a sentiment dictionary.
+    # which contains pos, neg, neu, and compound scores.
+    sentiment_dict = sid_obj.polarity_scores(sentence)
+    return sentiment_dict
+    
+def sentiment_scores(sentence):
+ 
+    # Create a SentimentIntensityAnalyzer object.
+    sid_obj = SentimentIntensityAnalyzer()
+ 
+    # polarity_scores method of SentimentIntensityAnalyzer
+    # object gives a sentiment dictionary.
+    # which contains pos, neg, neu, and compound scores.
+    sentiment_dict = sid_obj.polarity_scores(sentence)
+    return sentiment_dict['compound']
+
 proposed_getdata('russia')
 fuzzy()
-
+print(combine())
