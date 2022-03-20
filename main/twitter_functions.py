@@ -86,12 +86,15 @@ def twitter_query(query):
     # Instantiate an object
     python_tweets = Twython(creds['CONSUMER_KEY'], creds['CONSUMER_SECRET'])
 
+    query+= "-filter:retweets"
+
     # Create our query
     query = {'q': query,
             'result_type': 'mixed',
             'count': 100,
             'lang': 'en',
-            'geocode':'' 
+            'geocode':'',
+            'tweet_mode': 'extended' 
             }
 
     # Search tweets
@@ -99,7 +102,7 @@ def twitter_query(query):
     for status in python_tweets.search(**query)['statuses']:
         dict_['user'].append(status['user']['screen_name'])
         dict_['date'].append(status['created_at'])
-        dict_['text'].append(status['text'])
+        dict_['text'].append(status['full_text'])
         dict_['favorite_count'].append(status['favorite_count'])
         dict_['hashtags'].append([hashtag['text'] for hashtag in status['entities']['hashtags']])
         dict_['location'].append(status['user']['location'])
@@ -702,4 +705,4 @@ num_of_tweets = 100
 summary_size = int(pow(num_of_tweets,0.5))
 df,positive,negative,neutral = twitter_query(topic)
 generate_sentiment_summary(df)
-#summary =summarize(text,summary_size)
+
