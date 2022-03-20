@@ -155,7 +155,7 @@ def getinfo(name):
 def sentplot(df):
     fig, ax = plt.subplots()
     color_dict = {'Positive':'#6ab04c', 'Negative':'#eb4d4b', 'Neutral':'#22a6b3'}
-    fig=df['sentiment'].value_counts().plot(ax=ax, kind='barh',color=df['sentiment'].replace(color_dict))
+    fig=df['sentiment'].value_counts().plot(ax=ax, kind='barh')
     return plt
 
 def tweetClean(df):
@@ -578,7 +578,7 @@ def proposed_sent(sentence):
     sentiment_dict = sid_obj.polarity_scores(sentence)
     return sentiment_dict
     
-def sentiment_scores(sentence):
+'''def sentiment_scores(sentence):
  
     # Create a SentimentIntensityAnalyzer object.
     sid_obj = SentimentIntensityAnalyzer()
@@ -587,7 +587,7 @@ def sentiment_scores(sentence):
     # object gives a sentiment dictionary.
     # which contains pos, neg, neu, and compound scores.
     sentiment_dict = sid_obj.polarity_scores(sentence)
-    return sentiment_dict['compound']
+    return sentiment_dict['compound']'''
 
 '''proposed_getdata('russia')
 fuzzy()

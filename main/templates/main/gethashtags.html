@@ -59,10 +59,45 @@
               </form>
               
             </div>
-         
+            
           </div>
           
-        </div>
+          {% for row in data %}
+          <div class="card card-stats">
+            <!-- Card body -->
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Highest tweet count</h5>
+                  <span class="h2 font-weight-bold mb-0">350,897</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+                    <i class="ni ni-active-40"></i>
+                  </div>
+                </div>
+              </div>
+              <p class="mt-3 mb-0 text-sm">
+                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                <span class="text-nowrap">Since last month</span>
+              </p>
+            </div>
+          </div>
+          {% endfor %}
+          
+          
+
+
+
+
+
+
+
+
+
+
+
+
         <div class="col-xl-4">
           <div class="card">
             <div class="card-header bg-transparent">
@@ -78,8 +113,7 @@
               Posts with hashtags get twice as much engagement as posts without hashtags, according to Buffer. Tweets with two hashtags get the highest engagement, and engagement falls as the number of hashtags increase.
             </div>
           </div>
-          
-          
+    
         </div>
         
 
