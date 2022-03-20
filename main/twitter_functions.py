@@ -23,6 +23,8 @@ import numpy as np
 import skfuzzy as fuzz
 import matplotlib.pyplot as plt
 import os
+import nltk
+import heapq
 
 
 
@@ -574,7 +576,6 @@ def combine():
     return result
     
 def proposed_sent(sentence):
- 
     # Create a SentimentIntensityAnalyzer object.
     sid_obj = SentimentIntensityAnalyzer()
  
@@ -621,3 +622,84 @@ def get_trends_india():
     
     return pd.DataFrame({'hashtag':hashtag, 'vol':vol}).dropna()
 
+def summarize(text, size):
+    # Preprocessing the data
+    text = re.sub(r'\[[0-9]*\]',' ',text)
+    text = re.sub(r'(\@|\#)(\S)+(\b)',' ',text)
+    text = re.sub(r'(https|http)?:\/\/(\w|\.|\/|\?|\=|\&|\%)*\b', ' ', text)
+    text = re.sub(r'\s+',' ',text)
+    clean_text = text.lower()
+    clean_text = re.sub(r'\W',' ',clean_text)
+    clean_text = re.sub(r'\d',' ',clean_text)
+    clean_text = re.sub(r'(\s)+',' ',clean_text)
+    
+    # Tokenize sentences
+    sentences = nltk.sent_tokenize(text)
+    
+    # Stopword list
+    stop_words = nltk.corpus.stopwords.words('english')
+    
+    # Word counts 
+    word2count = {}
+    for word in nltk.word_tokenize(clean_text):
+        if word not in stop_words:
+            if word not in word2count.keys():
+                word2count[word] = 1
+            else:
+                word2count[word] += 1
+    
+    # Converting counts to weights
+    for key in word2count.keys():
+        word2count[key] = word2count[key]/max(word2count.values())
+        
+    # Product sentence scores    
+    sent2score = {}
+    for sentence in sentences:
+        for word in nltk.word_tokenize(sentence.lower()):
+            if word in word2count.keys():
+                if len(sentence.split(' ')) < 25:
+                    if sentence not in sent2score.keys():
+                        sent2score[sentence] = word2count[word]
+                    else:
+                        sent2score[sentence] += word2count[word]
+                        
+    # Gettings best 5 lines             
+    best_sentences = heapq.nlargest(size, sent2score, key=sent2score.get)
+    
+    summary = ""
+    for sentence in best_sentences:
+        summary = summary + "\n" + sentence;
+        #summary.append(sentence)
+    
+    return summary
+
+def generate_sentiment_summary(df):
+    pos_tweets = []
+    neg_tweets = []
+    for i, row in df.iterrows():
+        if row['sentiment'] == 'Positive':
+            pos_tweets.append(row['text'])
+        elif row['sentiment'] == 'Negative':
+            neg_tweets.append(row['text'])
+        else:
+            pass
+    
+    pos_text = (". ").join(pos_tweets)
+    neg_text = (". ").join(neg_tweets)
+
+    summary_size = int(pow(len(df),0.5))
+    pos_summary = summarize(pos_text, summary_size)
+    neg_summary = summarize(neg_text, summary_size)
+
+    print('\nPositive: ')
+    print(pos_summary)
+
+    print('\nNegative: ')
+    print(neg_summary)
+
+topic = 'ios15'
+num_of_tweets = 100
+summary_size = int(pow(num_of_tweets,0.5))
+df,positive,negative,neutral = twitter_query(topic)
+generate_sentiment_summary(df)
+#summary =summarize(text,summary_size)
