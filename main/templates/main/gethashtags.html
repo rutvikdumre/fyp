@@ -57,33 +57,20 @@
                   <span aria-hidden="false">×</span>
                 </button>
               </form>
-              
+              <br>
+              <h6 class="h4 text-white d-inline-block mb-0">You can enter the topic of your tweet or the tweet itself to generate relevant hashtags!</h6>
             </div>
             
           </div>
           
-          {% for row in data %}
-          <div class="card card-stats">
-            <!-- Card body -->
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">Highest tweet count</h5>
-                  <span class="h2 font-weight-bold mb-0">350,897</span>
-                </div>
-                <div class="col-auto">
-                  <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
-                    <i class="ni ni-active-40"></i>
-                  </div>
-                </div>
-              </div>
-              <p class="mt-3 mb-0 text-sm">
-                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                <span class="text-nowrap">Since last month</span>
-              </p>
-            </div>
+          
           </div>
-          {% endfor %}
+ 
+
+          
+          
+         
+         
           
           
 
@@ -116,10 +103,50 @@
     
         </div>
         
-
+        
       </div>
       
-      {% include "includes/footer.html" %}
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <!-- Card header -->
+            <div class="card-header border-0">
+              <h3 class="mb-0">Trending Topics in India Right Now:</h3>
+            </div>
+            <!-- Light table -->
+            <div class="table" style="width: 100%;">
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col" width="10%">Hashtags</th>
+                    <th scope="col" width="10%">Tweet Count</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {% for row in data %}
+                  <tr> 
+                    {% for item in row %}
+                    {% if forloop.first %}
+                    <td style="width:10%; white-space: normal;"><a target="_blank" url="www.twitter.com/{{ item }}">{{ item }}</a></td>
+                    {% else %}
+                    <td style="width: 10%; white-space: normal;">{{ item }}</td>
+                    {% endif %}
+                    {% endfor %}
+                  </tr>
+                  {% endfor %}
+              </tbody>
+
+                
+            </div>
+            <!-- Card footer -->
+            
+          </div>
+        </div>
+      </div>
+
+      
+    
 
     </div>  
   </div>

@@ -262,8 +262,10 @@ def score_compare(users):
         df_tweets = pd.DataFrame(dict_tweets)
         df_tweets['reach_score']=df_tweets['no_of_followers']-df_tweets['no_of_following']
         df_tweets['popularity_score']=df_tweets['no_of_likes']+df_tweets['tweet_count']
-
-
+        
+        tweet=df_tweets[df_tweets.tweet_count == df_tweets.tweet_count.max()]
+        fol= df_tweets[df_tweets.no_of_followers == df_tweets.no_of_followers.max()]
+        like = df_tweets[df_tweets.no_of_likes == df_tweets.no_of_likes.max()]
 
     pd.options.plotting.backend = "plotly"
 
@@ -295,13 +297,14 @@ def score_compare(users):
       inf+=[inf_calc_users(i['popularity_score'],i['reach_score'])]
     df_tweets['inf']=inf
 
-
+    infc= df_tweets[df_tweets.inf == df_tweets.inf.max()]
 
 
 
     fig3 = df_tweets.plot.bar(y='screenname', x="inf")
     fig3.write_html("./main/templates/main/inf.html")
     
+    return tweet,fol,like,infc
 
 
 
@@ -594,6 +597,24 @@ fuzzy()
 print(combine())'''
 
 def get_trends_india():
-    trends = api.trends_place(23424848)
+    
+    consumer_key = 'Tm30Tmmk1eaEzbi23Nm3NU1g5'
+    consumer_secret = 'jId4w7i1QLJGqv3JnlM33N9ZzZEhP1QmYu6RzaBYarrNM5HAzG'
+    access_token = '1390534356796514304-5KUsYqQaXJXxKwauEupXT7UtkYLAmY'
+    access_token_secret = 'U4nDzR99UsH8aCuKB9ntLGbZLCwwoDkLLjt0A3FvwngT1'
+
+    # Authorization and Authentication
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_token, access_token_secret)
+    api1 = tweepy.API(auth)
+    trends = api1.get_place_trends(23424848)
     trends=trends[0]['trends']
-    return trends
+    hashtag=[]
+    vol=[]
+    
+    for i in trends:
+      hashtag+=[i['name']]
+      vol+=[i['tweet_volume']]
+    
+    return pd.DataFrame({'hashtag':hashtag, 'vol':vol}).dropna()
+

@@ -9,6 +9,10 @@ from .models import *
 from .forms import RegisterForm
 from django.template.loader import render_to_string, get_template
 from . import hashtag 
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa 
 
 
 # Create your views here.
@@ -38,8 +42,6 @@ def register(response):
 
 
 def analytics_by_account(request,username):
-    
-    
     modes = {'likesperpost':{'name':'Likes per post'},'viewsvslikes':{'name':'Views vs Likes'},'compfollowers':{'name':'Followers comparison'}}
     return render(request,'main/options.html',{'profile':profile,'username':username,'modes':modes})
 
@@ -75,12 +77,16 @@ def analytics_by_topic(request):
 def compete(request):
     if request.method=='POST':
         uid=request.POST.get('uid')
-        twitter_functions.score_compare(uid.split(","))
+        tweet,fol,like,infc=twitter_functions.score_compare(uid.split(","))
         inf = render_to_string('main/inf.html')
         reach = render_to_string('main/reach.html')
         pop = render_to_string('main/pop.html')
         likes = render_to_string('main/likes.html')
-        return render(request, "main/user_comp.html", {'pop': pop, 'reach': reach, 'inf':inf, 'likes':likes} )
+        return render(request, "main/user_comp.html", {'uid':uid, 'pop': pop, 'reach': reach, 'inf':inf, 'likes':likes, 
+                                                       'tname':tweet['screenname'].to_string()[1:], 'tcount':tweet['tweet_count'].to_string()[1:], 
+                                                       'fname':fol['screenname'].to_string()[1:], 'fcount':fol['no_of_followers'].to_string()[1:], 
+                                                       'lname':like['screenname'].to_string()[1:], 'lcount':like['no_of_likes'].to_string()[1:], 
+                                                       'iname':infc['screenname'].to_string()[1:], 'icount':infc['inf'].to_string()[1:]} )
     return render(request, "main/user_input.html")
 
 def gethastag(request):
@@ -88,11 +94,22 @@ def gethastag(request):
         content=request.POST.get('content')
         hashtags= hashtag.gethash(content)
         #print(hashtags)
-        data= twitter_functions.get_trends_india()
-        return render(request, "main/showhash.html", {'hashtags': " ".join(hashtags), 'content':content, 'data':data} )
-    return render(request, "main/gethashtags.html")
+        
+        return render(request, "main/showhash.html", {'hashtags': " ".join(hashtags), 'content':content} )
+    data= twitter_functions.get_trends_india()
+    data = list(data.itertuples(index=False))
+    return render(request, "main/gethashtags.html",{'data':data})
 
-
+def html_to_pdf(template_src, context_dict={}):
+     template = get_template(template_src)
+     html  = template.render(context_dict)
+     result = BytesIO()
+     pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+     if not pdf.err:
+         return HttpResponse(result.getvalue(), content_type='application/pdf')
+     return None
+ 
+ 
 # likesPerPost
 # viewsvslikes
 # comp_followers
