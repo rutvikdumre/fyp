@@ -47,19 +47,28 @@ def analytics_by_account(request,username):
 
 def analytics_by_topic(request):
     if request.method=="POST":
-        topic=request.POST.get('topic')
+        s=str(request.POST.get('topic'))
+        return redirect('/sentiment/{}'.format(s))
+    return render(request, "main/sentiment.html")
+
+def sentimentfilter(request, topic):
+    if request.method=="POST":
         twitter_functions.twitter_credentials()
         df,positive,negative,neutral = twitter_functions.twitter_query(topic)
         df=df.iloc[:,:]
         twitter_functions.sentplot(df)
+        s=str(request.POST.get('Sentiment'))
+        msg= ''
+        if(s!='All' and s!='None'):
+            df = df[df['sentiment'] == s]
+            msg= ' [Showing data of only {} sentiment]'.format(s)
 
         rows=list(df.itertuples(index=False))
-
-        """buf = io.BytesIO()
-        fig.savefig(buf,format='png')
-        buf.seek(0)
-        string = base64.b64encode(buf.read())
-        uri =  urllib.parse.quote(string)"""
+        text= ''
+        for i in df['text']:
+            text+='. '+ str(i)
+      
+        summary = twitter_functions.summarize(text, 5)
 
         sent = render_to_string('main/sent.html')
 
@@ -67,15 +76,37 @@ def analytics_by_topic(request):
         fig = twitter_functions.wordcloud(twitter_functions.tweetClean(df))
 
         rows=list(df.itertuples(index=False))
-
+        
         buf1 = io.BytesIO()
         fig.savefig(buf1,format='png')
         buf1.seek(0)
         string1 = base64.b64encode(buf1.read())
         uri1 =  urllib.parse.quote(string1)
 
-        return render(request,'main/analysis.html',{'sent':sent, 'wordcloud': uri1,'data':rows,'topic':topic,'pos':positive,'neg':negative,'neu':neutral})
-    return render(request, "main/sentiment.html")
+        return render(request,'main/analysis.html',{'sent':sent, 'wordcloud': uri1,'data':rows,'topic':topic+msg,'pos':positive,'neg':negative,'neu':neutral, 'summary':summary})
+    twitter_functions.twitter_credentials()
+    df,positive,negative,neutral = twitter_functions.twitter_query(topic)
+    df=df.iloc[:,:]
+    twitter_functions.sentplot(df)
+
+    rows=list(df.itertuples(index=False))
+    sent = render_to_string('main/sent.html')
+    #wordcloud
+    fig = twitter_functions.wordcloud(twitter_functions.tweetClean(df))
+
+    rows=list(df.itertuples(index=False))
+    text= ''
+    for i in df['text']:
+        text+='. '+ str(i)
+      
+    summary = twitter_functions.summarize(text, 5)
+    buf1 = io.BytesIO()
+    fig.savefig(buf1,format='png')
+    buf1.seek(0)
+    string1 = base64.b64encode(buf1.read())
+    uri1 =  urllib.parse.quote(string1)
+
+    return render(request,'main/analysis.html',{'summary':summary,'sent':sent, 'wordcloud': uri1,'data':rows,'topic':topic,'pos':positive,'neg':negative,'neu':neutral})
 
 def compete(request):
     if request.method=='POST':

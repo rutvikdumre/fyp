@@ -642,7 +642,7 @@ def summarize(text, size):
     
     # Tokenize sentences
     sentences = nltk.sent_tokenize(text)
-    
+    print('---------Sentences: {}'.format(sentences))
     # Stopword list
     stop_words = nltk.corpus.stopwords.words('english')
     
@@ -673,9 +673,9 @@ def summarize(text, size):
     # Gettings best 5 lines             
     best_sentences = heapq.nlargest(size, sent2score, key=sent2score.get)
     
-    summary = ""
+    summary = []
     for sentence in best_sentences:
-        summary = summary + "\n" + sentence;
+        summary = summary + [sentence]
         #summary.append(sentence)
     
     return summary
