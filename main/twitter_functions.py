@@ -630,6 +630,8 @@ def get_trends_india():
     return pd.DataFrame({'hashtag':hashtag, 'vol':vol}).dropna()
 
 def summarize(text, size):
+    nltk.download('punkt')
+    nltk.download('stopwords')
     # Preprocessing the data
     text = re.sub(r'\[[0-9]*\]',' ',text)
     text = re.sub(r'(\@|\#)(\S)+(\b)',' ',text)
@@ -642,7 +644,7 @@ def summarize(text, size):
     
     # Tokenize sentences
     sentences = nltk.sent_tokenize(text)
-    print('---------Sentences: {}'.format(sentences))
+    
     # Stopword list
     stop_words = nltk.corpus.stopwords.words('english')
     
