@@ -144,6 +144,15 @@ def html_to_pdf(template_src, context_dict={}):
          return HttpResponse(result.getvalue(), content_type='application/pdf')
      return None
  
+def profile(request):
+    if request.method=='POST':
+        if request.user.is_authenticated:
+            tid=request.POST.get('tid')
+            request.user.first_name =tid
+            request.user.save()
+            return render(request, "main/profile.html", {'msg':'Profile Updated Successfully!'})
+        return render(request, "main/profile.html")
+    return render(request, "main/profile.html")
  
 # likesPerPost
 # viewsvslikes

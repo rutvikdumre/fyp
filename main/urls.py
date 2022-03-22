@@ -14,5 +14,6 @@ urlpatterns = [
     path('sentiment/<str:topic>',views.sentimentfilter,name='sentiment'),
     path('hashtag/',views.gethastag ,name='get-hashtags'),
     path('compare/',views.compete,name='user-comp'),
-    path('register/',views.register,name='register-view')
+    path('register/',views.register,name='register-view'),
+    path('profile/',views.profile,name='profile')
 ]
