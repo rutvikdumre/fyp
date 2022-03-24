@@ -17,15 +17,17 @@ from xhtml2pdf import pisa
 
 # Create your views here.
 
-def login(request): # Landing Page View
+def login(request):
+    print("login func   ")
     if request.user.is_authenticated:
-        if request.method=='POST':
+        print("user auth")
+        '''if request.method=='POST':
             uid=request.POST.get('uid')
             # print(user_history)
             return redirect('topic/'+uid)
         
-        br = render_to_string('main/file.html')
-        return render(request,'main/index.html',{'br':br})
+        #br = render_to_string('main/file.html')'''
+        return render(request,'main/index.html')
     else:
         return redirect('main:login-view')
 
@@ -46,68 +48,75 @@ def analytics_by_account(request,username):
     return render(request,'main/options.html',{'profile':profile,'username':username,'modes':modes})
 
 def analytics_by_topic(request):
-    if request.method=="POST":
-        s=str(request.POST.get('topic'))
-        return redirect('/sentiment/{}'.format(s))
-    return render(request, "main/sentiment.html")
+    if request.user.is_authenticated:
+        if request.method=="POST":
+            s=str(request.POST.get('topic'))
+            s=s.strip()
+            if (s==''):
+                return render(request, "main/sentiment.html", {'msg':'Invalid Input!'}) 
+            return redirect('/sentiment/{}'.format(s))
+        return render(request, "main/sentiment.html")
+    return render(request, "main/landing.html", {'msg':'Please login to use this module!'})
 
 def sentimentfilter(request, topic):
-    if request.method=="POST":
+    try:
+        if request.method=="POST":
+            twitter_functions.twitter_credentials()
+            df,positive,negative,neutral = twitter_functions.twitter_query(topic)
+            df=df.iloc[:,:]
+            twitter_functions.sentplot(df)
+            s=str(request.POST.get('Sentiment'))
+            msg= ''
+            if(s!='All' and s!='None'):
+                df = df[df['sentiment'] == s]
+                msg= ' [Showing data of only {} sentiment]'.format(s)
+
+            rows=list(df.itertuples(index=False))
+            text= ''
+            for i in df['text']:
+                text+='. '+ str(i)
+        
+            summary = twitter_functions.summarize(text, 5)
+
+            sent = render_to_string('main/sent.html')
+
+            #wordcloud
+            fig = twitter_functions.wordcloud(twitter_functions.tweetClean(df))
+
+            rows=list(df.itertuples(index=False))
+            
+            buf1 = io.BytesIO()
+            fig.savefig(buf1,format='png')
+            buf1.seek(0)
+            string1 = base64.b64encode(buf1.read())
+            uri1 =  urllib.parse.quote(string1)
+
+            return render(request,'main/analysis.html',{'sent':sent, 'wordcloud': uri1,'data':rows,'topic':topic+msg,'pos':positive,'neg':negative,'neu':neutral, 'summary':summary})
         twitter_functions.twitter_credentials()
         df,positive,negative,neutral = twitter_functions.twitter_query(topic)
         df=df.iloc[:,:]
         twitter_functions.sentplot(df)
-        s=str(request.POST.get('Sentiment'))
-        msg= ''
-        if(s!='All' and s!='None'):
-            df = df[df['sentiment'] == s]
-            msg= ' [Showing data of only {} sentiment]'.format(s)
+
+        rows=list(df.itertuples(index=False))
+        sent = render_to_string('main/sent.html')
+        #wordcloud
+        fig = twitter_functions.wordcloud(twitter_functions.tweetClean(df))
 
         rows=list(df.itertuples(index=False))
         text= ''
         for i in df['text']:
             text+='. '+ str(i)
-      
-        summary = twitter_functions.summarize(text, 5)
-
-        sent = render_to_string('main/sent.html')
-
-        #wordcloud
-        fig = twitter_functions.wordcloud(twitter_functions.tweetClean(df))
-
-        rows=list(df.itertuples(index=False))
         
+        summary = twitter_functions.summarize(text, 5)
         buf1 = io.BytesIO()
         fig.savefig(buf1,format='png')
         buf1.seek(0)
         string1 = base64.b64encode(buf1.read())
         uri1 =  urllib.parse.quote(string1)
 
-        return render(request,'main/analysis.html',{'sent':sent, 'wordcloud': uri1,'data':rows,'topic':topic+msg,'pos':positive,'neg':negative,'neu':neutral, 'summary':summary})
-    twitter_functions.twitter_credentials()
-    df,positive,negative,neutral = twitter_functions.twitter_query(topic)
-    df=df.iloc[:,:]
-    twitter_functions.sentplot(df)
-
-    rows=list(df.itertuples(index=False))
-    sent = render_to_string('main/sent.html')
-    #wordcloud
-    fig = twitter_functions.wordcloud(twitter_functions.tweetClean(df))
-
-    rows=list(df.itertuples(index=False))
-    text= ''
-    for i in df['text']:
-        text+='. '+ str(i)
-      
-    summary = twitter_functions.summarize(text, 5)
-    buf1 = io.BytesIO()
-    fig.savefig(buf1,format='png')
-    buf1.seek(0)
-    string1 = base64.b64encode(buf1.read())
-    uri1 =  urllib.parse.quote(string1)
-
-    return render(request,'main/analysis.html',{'summary':summary,'sent':sent, 'wordcloud': uri1,'data':rows,'topic':topic,'pos':positive,'neg':negative,'neu':neutral})
-
+        return render(request,'main/analysis.html',{'summary':summary,'sent':sent, 'wordcloud': uri1,'data':rows,'topic':topic,'pos':positive,'neg':negative,'neu':neutral})
+    except:
+        return render(request, "main/sentiment.html", {'msg':'Invalid Input!'}) 
 def compete(request):
     if request.method=='POST':
         uid=request.POST.get('uid')
@@ -156,4 +165,7 @@ def profile(request):
 
 
 def landing(request):
+    if request.user.is_authenticated:
+        print("user auth")
+        return render(request, "main/index.html")
     return render(request, "main/landing.html")
