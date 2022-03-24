@@ -15,5 +15,6 @@ urlpatterns = [
     path('hashtag/',views.gethastag ,name='get-hashtags'),
     path('compare/',views.compete,name='user-comp'),
     path('register/',views.register,name='register-view'),
-    path('profile/',views.profile,name='profile')
+    path('profile/',views.profile,name='profile'),
+    path('analysis/<str:userID>',views.analyze_profile,name='analyze-profile')
 ]

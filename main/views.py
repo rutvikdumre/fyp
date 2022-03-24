@@ -159,9 +159,9 @@ def profile(request):
             tid=request.POST.get('tid')
             request.user.first_name =tid
             request.user.save()
-            return render(request, "main/profile.html", {'msg':'Profile Updated Successfully!'})
-        return render(request, "main/profile.html")
-    return render(request, "main/profile.html")
+            return render(request, "main/profile.html", {'msg':'Profile Updated Successfully!','uid':request.user.first_name})
+        return render(request, "main/profile.html", {'uid':request.user.first_name})
+    return render(request, "main/profile.html", {'uid':request.user.first_name})
 
 
 def landing(request):
@@ -169,3 +169,19 @@ def landing(request):
         print("user auth")
         return render(request, "main/index.html")
     return render(request, "main/landing.html")
+
+
+def analyze_profile(request, userID):
+    df,df1, no_ofFollowers, no_ofLikes,no_ofFollowing, no_ofTweetsCount=twitter_functions.get_userdata(userID)
+    twitter_functions.get_graphs(df,df1)
+    favcount = render_to_string('main/favcount.html')
+    rtcount = render_to_string('main/rtcount.html')
+    eng = render_to_string('main/eng.html')
+    sentcount = render_to_string('main/sentcount.html')
+    
+    
+    
+    return render(request, "main/profile_analysis.html", {'uid':userID, 'favcount': favcount, 'rtcount': rtcount, 'eng':eng, 'sentcount':sentcount,
+                                                    'tcount':no_ofTweetsCount, 
+                                                    'fcount':no_ofFollowers, 
+                                                    'lcount':no_ofLikes})

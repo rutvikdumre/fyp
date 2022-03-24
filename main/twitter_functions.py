@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt
 import os
 import nltk
 import heapq
+from datetime import datetime
 
 
 
@@ -58,13 +59,13 @@ def sentiment_scores(sentence):
 
     # decide sentiment as positive, negative and neutral
     if sentiment_dict['compound'] >= 0.05 :
-        return "Positive"
+        return ["Positive",sentiment_dict['compound']]
 
     elif sentiment_dict['compound'] <= - 0.05 :
-        return "Negative"
+        return ["Negative",sentiment_dict['compound']]
 
     else :
-        return "Neutral"
+        return ["Neutral",sentiment_dict['compound']]
 
 def twitter_credentials():
     # Enter your keys/secrets as strings in the following fields
@@ -112,7 +113,7 @@ def twitter_query(query):
     df.sort_values(by='favorite_count', inplace=True, ascending=False)
     sentiment=[]
     for i in df['text']:
-        sentiment+=[sentiment_scores(i)]
+        sentiment+=[sentiment_scores(i)[0]]
     df['sentiment']=sentiment
     try:
         pos=df['sentiment'].value_counts()['Positive']
@@ -128,6 +129,58 @@ def twitter_query(query):
         neu=0
     print(df.shape)
     return df,pos,neg,neu
+
+
+def twitter_profile_query(query):
+    # Load credentials from json file
+    with open("twitter_credentials.json", "r") as file:
+        creds = json.load(file)
+
+    # Instantiate an object
+    python_tweets = Twython(creds['CONSUMER_KEY'], creds['CONSUMER_SECRET'])
+
+    query+= "-filter:retweets"
+
+    # Create our query
+    query = {'q': query,
+            'result_type': 'mixed',
+            'count': 100,
+            'lang': 'en',
+            'geocode':'',
+            'tweet_mode': 'extended' 
+            }
+
+    # Search tweets
+    dict_ = {'user': [], 'date': [], 'text': [], 'favorite_count': [], 'hashtags':[], 'location':[]}
+    for status in python_tweets.search(**query)['statuses']:
+        dict_['user'].append(status['user']['screen_name'])
+        dict_['date'].append(status['created_at'])
+        dict_['text'].append(status['full_text'])
+        dict_['favorite_count'].append(status['favorite_count'])
+        dict_['hashtags'].append([hashtag['text'] for hashtag in status['entities']['hashtags']])
+        dict_['location'].append(status['user']['location'])
+
+    # Structure data in a pandas DataFrame for easier manipulation
+    df = pd.DataFrame(dict_)
+    df.sort_values(by='favorite_count', inplace=True, ascending=False)
+    sentiment=[]
+    for i in df['text']:
+        sentiment+=[sentiment_scores(i)[1]]
+    df['sentiment']=sentiment
+    try:
+        pos=df['sentiment'].value_counts()['Positive']
+    except:
+        pos=0
+    try:
+        neg=df['sentiment'].value_counts()['Negative']
+    except:
+        neg=0
+    try:
+        neu=df['sentiment'].value_counts()['Neutral']
+    except:
+        neu=0
+    print(df.shape)
+    return df
 
 
 def getinfo(name):
@@ -592,20 +645,7 @@ def proposed_sent(sentence):
     sentiment_dict = sid_obj.polarity_scores(sentence)
     return sentiment_dict
     
-'''def sentiment_scores(sentence):
- 
-    # Create a SentimentIntensityAnalyzer object.
-    sid_obj = SentimentIntensityAnalyzer()
- 
-    # polarity_scores method of SentimentIntensityAnalyzer
-    # object gives a sentiment dictionary.
-    # which contains pos, neg, neu, and compound scores.
-    sentiment_dict = sid_obj.polarity_scores(sentence)
-    return sentiment_dict['compound']'''
 
-'''proposed_getdata('russia')
-fuzzy()
-print(combine())'''
 
 def get_trends_india():
     
@@ -706,4 +746,90 @@ def generate_sentiment_summary(df):
     print('\nNegative: ')
     print(neg_summary)
 
+
+def get_userdata(userID):
+    
+    api = tweepy.API(auth,timeout=10)
+    timeline = api.home_timeline()
+    
+    tweets = api.user_timeline(screen_name=userID, 
+                           # 200 is the maximum allowed count
+                           count=100,
+                           include_rts = False,
+                           # Necessary to keep full_text 
+                           # otherwise only the first 140 words are extracted
+                           tweet_mode = 'extended'
+                           )
+    all_tweets = []
+    all_tweets.extend(tweets)
+    oldest_id = tweets[-1].id
+    while True:
+        tweets = api.user_timeline(screen_name=userID, 
+                            # 200 is the maximum allowed count
+                            count=200,
+                            include_rts = False,
+                            max_id = oldest_id - 1,
+                            # Necessary to keep full_text 
+                            # otherwise only the first 140 words are extracted
+                            tweet_mode = 'extended'
+                            )
+        if len(tweets) == 0:
+            break
+        oldest_id = tweets[-1].id
+        all_tweets.extend(tweets)
+        
+    og_tweets = [i for i in all_tweets if not str(i.full_text).startswith('@')]
+    og_tweets 
+    outtweets = [[tweet.id_str, 
+                tweet.created_at, 
+                tweet.favorite_count, 
+                tweet.retweet_count, 
+                tweet.full_text.encode("utf-8").decode("utf-8")] 
+                for idx,tweet in enumerate(og_tweets)]
+    df = DataFrame(outtweets,columns=["id","created_at","favorite_count","retweet_count","text"])
+    df.to_csv('%s_tweets.csv' % userID,index=False)
+    
+    engagement = []
+    for i,row in df.iterrows():
+        engagement.append(row['favorite_count']+row['retweet_count'])
+
+    df['engagement'] = engagement
+    df1 = twitter_profile_query(userID)
+    sentiment_polarity = []
+    for j,i in df1.iterrows():
+        if i['sentiment']>= 0.05 :
+            sentiment_polarity.append('positive')
+        elif i['sentiment'] <= - 0.05 :
+            sentiment_polarity.append('negative')
+        else :
+            sentiment_polarity.append('neutral')
+
+    df1['sentiment_polarity'] = sentiment_polarity
+    
+    results = api.get_user(screen_name=userID)
+
+    no_ofFollowers = results.followers_count
+    no_ofLikes = results.favourites_count
+    no_ofFollowing = results.friends_count
+    no_ofTweetsCount = results.statuses_count
+    
+    return df, df1, no_ofFollowers, no_ofLikes,no_ofFollowing, no_ofTweetsCount
+    
+def get_graphs(df,df1):
+    if len(df)>100:
+        l = 100
+    else:
+        l = len(df)
+    sub_df = df[:l]
+   
+    fig0 = px.bar(sub_df, y=sub_df['favorite_count'], color=sub_df['favorite_count'], color_continuous_scale = "Spectral", template='plotly_white')
+    fig0.write_html('./main/templates/main/favcount.html')
+    fig1 = px.bar(sub_df, y=sub_df['retweet_count'], color=sub_df['retweet_count'], color_continuous_scale = "Spectral", template='plotly_white')
+    fig1.write_html('./main/templates/main/rtcount.html')
+    fig2 = px.line(sub_df, x='created_at', y='engagement', template='plotly_white')
+    fig2.write_html('./main/templates/main/eng.html')
+    fig = px.line(df1, x="date", y="sentiment", color='sentiment_polarity', color_discrete_sequence=["#686de0", "#6ab04c", "#ff7979"], markers=True, template='plotly_white')
+    fig.write_html('./main/templates/main/sentcount.html')
+    
+    
 
