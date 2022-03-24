@@ -706,9 +706,4 @@ def generate_sentiment_summary(df):
     print('\nNegative: ')
     print(neg_summary)
 
-"""topic = 'ios15'
-num_of_tweets = 100
-summary_size = int(pow(num_of_tweets,0.5))
-df,positive,negative,neutral = twitter_query(topic)
-generate_sentiment_summary(df)"""
 

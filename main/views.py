@@ -17,7 +17,7 @@ from xhtml2pdf import pisa
 
 # Create your views here.
 
-def landing(request): # Landing Page View
+def login(request): # Landing Page View
     if request.user.is_authenticated:
         if request.method=='POST':
             uid=request.POST.get('uid')
@@ -37,7 +37,7 @@ def register(response):
             return redirect('main:landing-page')
     else:
         form=RegisterForm()
-    return render(response, "main/register.html", {'form':form})
+    return render(response, "main/register1.html", {'form':form})
 
 
 
@@ -153,7 +153,7 @@ def profile(request):
             return render(request, "main/profile.html", {'msg':'Profile Updated Successfully!'})
         return render(request, "main/profile.html")
     return render(request, "main/profile.html")
- 
-# likesPerPost
-# viewsvslikes
-# comp_followers
+
+
+def landing(request):
+    return render(request, "main/landing.html")

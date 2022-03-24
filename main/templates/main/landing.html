@@ -1,0 +1,417 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="/static/assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="/static/assets/img/favicon.png">
+  <title>
+    Project B2
+  </title>
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  <!-- Nucleo Icons -->
+  <link href="/static/assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="/static/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <link href="/static/assets/css/font-awesome.css" rel="stylesheet" />
+  <link href="/static/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link href="/static/assets/css/argon-design-system.css?v=1.2.2" rel="stylesheet" />
+</head>
+
+<body class="index-page">
+  <!-- Navbar -->
+  <nav id="navbar-main"
+    class="navbar navbar-main navbar-expand-lg bg-white navbar-light position-sticky top-0 shadow py-2">
+    <div class="container">
+      <a class="navbar-brand mr-lg-5" href="./index.html">
+        <img src="/static/assets/img/brand/blue.png">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_global"
+        aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse" id="navbar_global">
+        <div class="navbar-collapse-header">
+          <div class="row">
+            <div class="col-6 collapse-brand">
+              <a href="./index.html">
+                <img src="/static/assets/img/brand/blue.png">
+              </a>
+            </div>
+            <div class="col-6 collapse-close">
+              <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar_global"
+                aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link" data-toggle="dropdown" href="#" role="button">
+              <i class="ni ni-ui-04 d-lg-none"></i>
+              <span class="nav-link-inner--text">What We Offer</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-xl">
+              <div class="dropdown-menu-inner">
+                <a href="#Competitive"
+                  class="media d-flex align-items-center">
+                  <div class="icon icon-shape bg-gradient-primary rounded-circle text-white">
+                    <i class="ni ni-spaceship"></i>
+                  </div>
+                  <div class="media-body ml-3">
+                    <h6 class="heading text-primary mb-md-1">Competitive Benchmarking</h6>
+                    <p class="description d-none d-md-inline-block mb-0">Learn how to use compiling Scss, change brand
+                      colors and more.</p>
+                  </div>
+                </a>
+                <a href="#reporting"
+                  class="media d-flex align-items-center">
+                  <div class="icon icon-shape bg-gradient-success rounded-circle text-white">
+                    <i class="ni ni-palette"></i>
+                  </div>
+                  <div class="media-body ml-3">
+                    <h6 class="heading text-primary mb-md-1">Automated Reporting</h6>
+                    <p class="description d-none d-md-inline-block mb-0">Learn more about colors, typography, icons and
+                      the grid system we used for .</p>
+                  </div>
+                </a>
+                <a href="#Intelligence"
+                  class="media d-flex align-items-center">
+                  <div class="icon icon-shape bg-gradient-warning rounded-circle text-white">
+                    <i class="ni ni-ui-04"></i>
+                  </div>
+                  <div class="media-body ml-3">
+                    <h5 class="heading text-warning mb-md-1">Competitive Intelligence</h5>
+                    <p class="description d-none d-md-inline-block mb-0">Browse our 50 beautiful handcrafted components
+                      offered in the Free version.</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </li>
+          
+        </ul>
+        <ul class="navbar-nav align-items-lg-center ml-lg-auto">
+          
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="https://github.com/rutvikdumre/twitter-sentiment"
+              target="_blank" data-toggle="tooltip" title="Star us on Github">
+              <i class="fa fa-github"></i>
+              <span class="nav-link-inner--text d-lg-none">Github</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-outline-primary" href="{% url 'main:login-view' %}" >
+              <span class="nav-link-inner--text">Login</span>
+            </a>
+          </li>
+          <li class="nav-item d-none d-lg-block">
+            <a href="{% url 'main:register-view' %}" 
+              class="btn btn-primary btn-icon">
+              
+              <span class="nav-link-inner--text">Register</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Navbar -->
+  <div class="wrapper">
+
+    <!-- Header -->
+
+    <div class="section section-hero section-shaped">
+      <div class="shape shape-style-1 shape-primary">
+        <span class="span-150"></span>
+        <span class="span-50"></span>
+        <span class="span-50"></span>
+        <span class="span-75"></span>
+        <span class="span-100"></span>
+        <span class="span-75"></span>
+        <span class="span-50"></span>
+        <span class="span-100"></span>
+        <span class="span-50"></span>
+        <span class="span-100"></span>
+      </div>
+      <div class="page-header">
+        <div class="container shape-container d-flex align-items-center py-lg">
+          <div class="col px-0">
+            <div class="row align-items-center justify-content-center">
+              <div class="col-lg-6 text-center">
+                <!--img src="/static/assets/img/brand/white.png" style="width: 200px;" class="img-fluid"-->
+                <h4 class="mb-5 display-3 text-white">
+                  <strong>Improve your social strategy by understanding what’s working and what’s not.</strong>
+                </h4>
+                <p class="lead text-white">
+
+                  social media benchmarking platform that helps your team make real-time
+                  decisions by comparing, benchmarking, and analyzing your social performance.</p>
+                <div class="btn-wrapper mt-5">
+                  <a href="{% url 'main:login-view' %}" class="btn btn-success">Login</a>
+                    <a href="{% url 'main:register-view' %}" class="btn btn-white">Register</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="separator separator-bottom separator-skew zindex-100">
+        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+          xmlns="http://www.w3.org/2000/svg">
+          <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+        </svg>
+      </div>
+    </div>
+
+    <!-- What you can do -->
+
+    <div class="section section-components pb-0" id="section-components">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-12">
+            <!-- Basic elements -->
+            <h2 class="display-3">What you can do</h2>
+            <div class="row">
+              <div class="col-md-4">
+                
+                <div class="modal-body" style="text-align: center;">
+                  
+                  <h6 class="heading-title text-warning mb-0" style="text-align: center; font-size: 1rem;">
+                    <i class="ni ni-chart-bar-32" style="font-size: 2em;"></i><br>
+                    Competitive <br>
+                    Benchmarking</h6>
+                  <br>
+                  <p>Understand what’s working and what’s not so you can improve your social strategy.</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="modal-body" style="text-align: center;">
+                  <h6 class="heading-title text-warning mb-0" style="text-align: center; font-size: 1rem;">
+                    <i class="ni ni-archive-2" style="font-size: 2em;"></i><br>
+                    Automated <br>
+                    Reporting</h6>
+                  <br>
+                  <p>Eliminate the tedium of manually reporting, easily report on your social KPIs, and save time.</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="modal-body" style="text-align: center;">
+                  <h6 class="heading-title text-warning mb-0" style="text-align: center; font-size: 1rem;">
+                    <i class="ni ni-circle-08" style="font-size: 2em;"></i><br>
+                    Competitive <br>
+                    Intelligence</h6>
+                  <br>
+                  <p>See what your competition is doing and learn from their successes, innovations and mistakes.</p>
+
+                </div>
+
+
+
+              </div>
+            </div>
+
+
+            <div class="section section-lg section-nucleo-icons pb-250">
+              <div class="container">
+                <div class="row justify-content-center">
+                  <div class="col-lg-8 text-center">
+                    <h2 class="display-3">What we offer</h2>
+                    <p class="lead">
+                      The official package contains over 21.000 icons which are looking great in combination with Argon
+                      Design System. Make sure you check all of them and use those that you like the most.
+                    </p>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+
+            <!-- Button links -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+  <!-- Improve content -->
+
+  <section class="section section-lg section-shaped" id="Competitive">
+    <div class="shape shape-style-1 shape-default" >
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="container py-md" >
+      <div class="row row-grid justify-content-between align-items-center">
+        <div class="col-lg-6">
+          <h3 class="display-3 text-white">Improve your content engagement by understanding what’s working.</h3>
+          <p class="lead text-white">Get immediate insights by filtering any brand’s organic and paid content by
+            engagement to see whats resonating with social media audiences right now.</p>
+        </div>
+
+      </div>
+    </div>
+
+
+
+
+
+    <!-- SVG separator -->
+    <div class="separator separator-bottom separator-skew" id="reporting">
+      <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+        xmlns="http://www.w3.org/2000/svg">
+        <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+      </svg>
+    </div>
+  </section>
+
+  <div class="section" style="background-image: url('/static/assets/img/ill/1.svg');">
+    <div class="container py-md">
+      <div class="row justify-content-between align-items-center">
+        <div class="col-lg-6 mb-lg-auto">
+          
+        </div>
+        <div class="col-lg-5 mb-5 mb-lg-0">
+          <h3 class="display-3">Save time and increase efficiency with
+            automated reporting.</h3>
+          <p class="lead mt-4">Get all your reporting done for you across any social network, brand, and time period.
+            We provide ready-made reports and files that can be downloaded</p>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="section section-lg section-shaped" id="Intelligence">
+    <div class="shape shape-style-1 shape-default">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="container py-md">
+      <div class="row row-grid justify-content-between align-items-center">
+        <div class="col-lg-6">
+          <h3 class="display-3 text-white">Make data-driven
+            decisions to improve
+            your content strategy.</h3>
+          <p class="lead text-white">Reduce time-to-insight with all your owned-channel analytics in one place. Quickly
+            spot trends in performance, see the causes and effects, and confidently answer the question: Is my social
+            strategy working?</p>
+        </div>
+
+      </div>
+    </div>
+
+
+
+
+
+    <!-- SVG separator -->
+    <div class="separator separator-bottom separator-skew">
+      <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+        xmlns="http://www.w3.org/2000/svg">
+        <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+      </svg>
+    </div>
+  </section>
+  
+  <footer class="footer has-cards">
+    <div class="container">
+      <div class="row row-grid align-items-center my-md">
+        <div class="col-lg-6">
+          <h3 class="text-primary font-weight-light mb-2">Thank you for supporting us!</h3>
+          <h4 class="mb-0 font-weight-light">Let's get in touch on any of these platforms.</h4>
+        </div>
+        <div class="col-lg-6 text-lg-center btn-wrapper">
+          <button target="_blank" href="https://github.com/rutvikdumre/" rel="nofollow"
+            class="btn btn-icon-only btn-github rounded-circle" data-toggle="tooltip"
+            data-original-title="Star on Github">
+            <span class="btn-inner--icon"> <i class="fa fa-github"></i></span> 
+          </button>
+          <button target="_blank" href="https://github.com/rutvikdumre/" rel="nofollow"
+            class="btn btn-icon-only btn-github rounded-circle" data-toggle="tooltip"
+            data-original-title="Star on Github">
+            <span class="btn-inner--icon"><i class="fa fa-github"></i></span>
+          </button>
+          <button target="_blank" href="https://github.com/rutvikdumre/" rel="nofollow"
+            class="btn btn-icon-only btn-github rounded-circle" data-toggle="tooltip"
+            data-original-title="Star on Github">
+            <span class="btn-inner--icon"><i class="fa fa-github"></i></span>
+          </button>
+          
+        </div>
+      </div>
+      <hr>
+      <div class="row align-items-center justify-content-md-between">
+        <div class="col-md-6">
+          <div class="copyright">
+            Project B2 a project by students of <a href="https://www.nmims.edu/" rel="nofollow" target="_blank">NMIMS University</a>.
+          </div>
+        </div>
+        <div class="col-md-6">
+          
+        </div>
+      </div>
+    </div>
+  </footer>
+  </div>
+  <!--   Core JS Files   -->
+  <script src="/static/assets/js/core/jquery.min.js" type="text/javascript"></script>
+  <script src="/static/assets/js/core/popper.min.js" type="text/javascript"></script>
+  <script src="/static/assets/js/core/bootstrap.min.js" type="text/javascript"></script>
+  <script src="/static/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+  <script src="/static/assets/js/plugins/bootstrap-switch.js"></script>
+  <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+  <script src="/static/assets/js/plugins/nouislider.min.js" type="text/javascript"></script>
+  <script src="/static/assets/js/plugins/moment.min.js"></script>
+  <script src="/static/assets/js/plugins/datetimepicker.js" type="text/javascript"></script>
+  <script src="/static/assets/js/plugins/bootstrap-datepicker.min.js"></script>
+  <!-- Control Center for Argon UI Kit: parallax effects, scripts for the example pages etc -->
+  <!--  Google Maps Plugin    -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+  <script src="/static/assets/js/argon-design-system.min.js?v=1.2.2" type="text/javascript"></script>
+  <script>
+    function scrollToDownload() {
+
+      if ($('.section-download').length != 0) {
+        $("html, body").animate({
+          scrollTop: $('.section-download').offset().top
+        }, 1000);
+      }
+    }
+  </script>
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS &&
+      TrackJS.install({
+        token: "ee6fab19c5a04ac1a32a645abde4613a",
+        application: "argon-design-system-pro"
+      });
+  </script>
+</body>
+
+</html>
