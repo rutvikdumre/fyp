@@ -344,12 +344,12 @@ def score_compare(users):
     # Popularity Score and Reach score
     fig2= px.bar(df_tweets, y = "screenname", x = "popularity_score",
        labels = {"screenname": "Twitter Screen name", "popularity_score": "Popularity Score"},
-       orientation = 'h',color = "popularity_score", color_continuous_scale = px.colors.cyclical.Phase, template='plotly_white')
+       orientation = 'h',color = "popularity_score", color_continuous_scale = px.colors.diverging.Spectral, template='plotly_white')
     fig2.write_html("./main/templates/main/pop.html")
 
     fig3 = px.bar(df_tweets, y = "screenname", x = "reach_score",
        labels = {"screenname": "Twitter Screen name", "reach_score": "Reach Score"},
-       orientation = 'h',color = "reach_score", color_continuous_scale =px.colors.cyclical.Phase, template='plotly_white')
+       orientation = 'h',color = "reach_score", color_continuous_scale =px.colors.diverging.Spectral, template='plotly_white')
     fig3.write_html("./main/templates/main/reach.html")
 
     # Normalisation and Influencer score calculation
@@ -366,7 +366,7 @@ def score_compare(users):
 
     fig4 = px.bar(df_tweets, y = "screenname", x = "inf",
        labels = {"screenname": "Twitter Screen name", "inf": "Influence Score"},
-       orientation = 'h',color = "inf", color_continuous_scale = px.colors.cyclical.Phase, template='plotly_white')
+       orientation = 'h',color = "inf", color_continuous_scale = px.colors.diverging.Spectral, template='plotly_white')
     fig4.write_html("./main/templates/main/inf.html")
     
     return tweet,fol,like,infc
