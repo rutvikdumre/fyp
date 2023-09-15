@@ -1,4 +1,4 @@
-# fyp - AI Powered Social Media Analytics and Benchmarking
+# Social Media Analytics and Benchmarking
 # Problem Definition
 To come up with a technique to analyze the sentiment of a topic being discussed on a social media platform while considering the influence of the user who has created the content. 
 Analyse the data and key attributes such as follower count, likes, shares, among others, of the businesses on social media for getting insights. 
